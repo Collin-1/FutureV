@@ -1,0 +1,104 @@
+@page "{id:int}"
+@model FutureV.Pages.Admin.Cars.DetailsModel
+@{
+    ViewData["Title"] = Model.Car?.Name ?? "Vehicle Details";
+}
+
+@if (Model.Car is null)
+{
+    <section class="container py-5">
+        <div class="alert alert-warning">Vehicle not found.</div>
+    </section>
+    return;
+}
+
+<section class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h1 class="display-5 mb-1">@Model.Car.Name</h1>
+            <p class="text-muted mb-0">@Model.Car.Tagline</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-secondary" asp-page="Index">Back</a>
+            <a class="btn btn-outline-primary" asp-page="Edit" asp-route-id="@Model.Car.Id">Edit</a>
+            <form method="post" asp-page="/Admin/Logout">
+                <button type="submit" class="btn btn-outline-secondary">Sign out</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            @if (Model.Car.Images.Count == 0)
+            {
+                <div class="ratio ratio-16x9 bg-dark-subtle d-flex align-items-center justify-content-center rounded shadow-sm">
+                    <span class="text-secondary text-uppercase">No images yet</span>
+                </div>
+            }
+            else
+            {
+                <div id="adminPreviewCarousel" class="carousel slide shadow-sm rounded" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @for (var i = 0; i < Model.Car.Images.Count; i++)
+                        {
+                            var image = Model.Car.Images.ElementAt(i);
+                            <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
+                                <img src="@image.ImageUrl" class="d-block w-100" alt="@image.ViewAngle view of @Model.Car.Name" />
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>@image.ViewAngle</h5>
+                                    @if (!string.IsNullOrEmpty(image.Description))
+                                    {
+                                        <p>@image.Description</p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#adminPreviewCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#adminPreviewCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            }
+        </div>
+        <div class="col-lg-5">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h5">Core Specs</h2>
+                    <dl class="row mb-0">
+                        <dt class="col-5">Autonomy</dt>
+                        <dd class="col-7">@Model.Car.AutonomyLevel</dd>
+                        <dt class="col-5">Drive Type</dt>
+                        <dd class="col-7">@Model.Car.DriveType</dd>
+                        <dt class="col-5">Energy System</dt>
+                        <dd class="col-7">@Model.Car.EnergySystem</dd>
+                        <dt class="col-5">Power Output</dt>
+                        <dd class="col-7">@Model.Car.PowerOutput</dd>
+                        <dt class="col-5">Range</dt>
+                        <dd class="col-7">@Model.Car.RangePerCharge km</dd>
+                        <dt class="col-5">Top Speed</dt>
+                        <dd class="col-7">@Model.Car.TopSpeed km/h</dd>
+                        <dt class="col-5">0-60 mph</dt>
+                        <dd class="col-7">@Model.Car.ZeroToSixty s</dd>
+                        <dt class="col-5">Fast Charge</dt>
+                        <dd class="col-7">@Model.Car.FastChargeMinutes min</dd>
+                        <dt class="col-5">Seating</dt>
+                        <dd class="col-7">@Model.Car.SeatingCapacity</dd>
+                        <dt class="col-5">Release Year</dt>
+                        <dd class="col-7">@Model.Car.ReleaseYear</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5">Narrative</h2>
+                    <p class="mb-0">@Model.Car.Narrative</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

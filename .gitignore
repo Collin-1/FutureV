@@ -1,0 +1,37 @@
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# IDE directories
+.idea/
+.vs/
+
+# Logs
+*.log
+
+# Generated files
+FutureV.csproj.user
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Databases
+*.db
+
+# EF migration backups
+Migrations/*.Designer.cs.bak
+
+
+/wwwroot/lib/ 
+.github/

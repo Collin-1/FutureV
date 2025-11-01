@@ -1,0 +1,93 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "FutureV";
+}
+
+<header class="bg-dark text-light py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold">FutureV</h1>
+                <p class="lead mb-4">An eCommerce playground for visionary vehicles. Explore kinetic concepts engineered for the cities of 2035 and beyond.</p>
+                <a class="btn btn-outline-light btn-lg" asp-page="/Catalog/Index">View Full Catalog</a>
+            </div>
+            <div class="col-lg-5 text-lg-end mt-4 mt-lg-0">
+                <span class="badge bg-primary-subtle text-primary-emphasis fs-6">Autonomy • Mag-lev • Plasma Drive</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 mb-0">Latest Concepts</h2>
+        <a class="link-secondary" asp-page="/Catalog/Index">See everything</a>
+    </div>
+
+    <div class="row g-4">
+    @if (Model.Cars.Count == 0)
+        {
+            <div class="col-12">
+                <div class="alert alert-info shadow-sm">
+                    No concepts are live yet. Enter the <a class="alert-link" asp-page="/Admin/Login">admin deck</a> to seed the fleet.
+                </div>
+            </div>
+        }
+        else
+        {
+            foreach (var car in Model.Cars)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <div class="card h-100 shadow-sm border-0 overflow-hidden">
+                        <div class="ratio ratio-16x9 bg-dark-subtle">
+                            @if (!string.IsNullOrEmpty(car.HeroImageUrl))
+                            {
+                                <img src="@car.HeroImageUrl" class="w-100 h-100 object-fit-cover" alt="@car.Name concept render" />
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-center h-100 text-uppercase fw-semibold text-secondary">Image coming soon</div>
+                            }
+                        </div>
+                        <div class="card-body">
+                            <span class="badge bg-primary-subtle text-primary-emphasis mb-2">@car.Autonomy</span>
+                            <h3 class="h4">@car.Name</h3>
+                            <p class="text-muted">@car.Tagline</p>
+                            <div class="d-flex justify-content-between text-secondary small">
+                                <span>@car.Range km range</span>
+                                <span>@car.TopSpeed km/h peak</span>
+                                <span>@car.ZeroToSixty s to 60</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pt-0 pb-4 px-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fw-semibold">@car.BasePrice.ToString("C0")</div>
+                                <a class="btn btn-outline-primary btn-sm" asp-page="/Catalog/Details" asp-route-id="@car.Id">View specs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+<section class="bg-body-secondary py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h3 class="h5">Immersive Galleries</h3>
+                <p class="text-muted">Each concept features multi-angle imagery so prospects can orbit the vehicle from their browser.</p>
+            </div>
+            <div class="col-md-4">
+                <h3 class="h5">Spec Storytelling</h3>
+                <p class="text-muted">Technical data meets cosmic copywriting to set the tone for your innovation studio.</p>
+            </div>
+            <div class="col-md-4">
+                <h3 class="h5">Admin Control</h3>
+                <p class="text-muted">Launch the <strong>admin</strong> deck to author, edit, or retire vehicles rapidly during product sprints.</p>
+            </div>
+        </div>
+    </div>
+</section>

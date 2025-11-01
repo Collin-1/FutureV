@@ -1,0 +1,61 @@
+@page
+@model FutureV.Pages.ContactModel
+@{
+    ViewData["Title"] = "Contact FutureV";
+}
+
+<section class="bg-dark text-light py-5">
+    <div class="container">
+        <h1 class="display-5">Partner With FutureV</h1>
+        <p class="lead">Ready to co-create your mobility future? Signal below and we will align timelines.</p>
+    </div>
+</section>
+
+<section class="container py-5" style="max-width: 720px;">
+    @if (TempData["StatusMessage"] is string statusMessage)
+    {
+        <div class="alert alert-success">@statusMessage</div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Input.Name" class="form-label"></label>
+                        <input asp-for="Input.Name" class="form-control" />
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Input.Email" class="form-label"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Input.Organization" class="form-label"></label>
+                        <input asp-for="Input.Organization" class="form-control" />
+                        <span asp-validation-for="Input.Organization" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Input.VehicleInterest" class="form-label"></label>
+                        <input asp-for="Input.VehicleInterest" class="form-control" />
+                        <span asp-validation-for="Input.VehicleInterest" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Input.Message" class="form-label"></label>
+                        <textarea asp-for="Input.Message" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Input.Message" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mt-4 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Send Transmission</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

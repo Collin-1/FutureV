@@ -1,0 +1,41 @@
+@page "{id:int}"
+@model FutureV.Pages.Admin.Cars.DeleteModel
+@{
+    ViewData["Title"] = "Delete Futuristic Car";
+}
+
+@if (Model.Car is null)
+{
+    <section class="container py-5">
+        <div class="alert alert-warning">Vehicle not found.</div>
+    </section>
+    return;
+}
+
+<section class="container py-5">
+    <div class="d-flex justify-content-end mb-3">
+        <form method="post" asp-page="/Admin/Logout">
+            <button type="submit" class="btn btn-outline-secondary">Sign out</button>
+        </form>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="h4">Delete @Model.Car.Name?</h1>
+            <p class="text-muted">This removes the vehicle and all associated gallery images from FutureV.</p>
+            <dl class="row">
+                <dt class="col-sm-3">Tagline</dt>
+                <dd class="col-sm-9">@Model.Car.Tagline</dd>
+                <dt class="col-sm-3">Base Price</dt>
+                <dd class="col-sm-9">@Model.Car.BasePrice.ToString("C0")</dd>
+                <dt class="col-sm-3">Autonomy</dt>
+                <dd class="col-sm-9">@Model.Car.AutonomyLevel</dd>
+            </dl>
+
+            <form method="post" class="d-flex gap-2">
+                <a class="btn btn-outline-secondary" asp-page="Index">Cancel</a>
+                <button type="submit" class="btn btn-danger">Delete Vehicle</button>
+            </form>
+        </div>
+    </div>
+</section>

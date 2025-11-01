@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FutureV</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FutureV.styles.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100 bg-body-tertiary">
+    <header class="shadow-sm">
+        <nav class="navbar navbar-expand-lg bg-body">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-page="/Index">FutureV</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#futurevNav" aria-controls="futurevNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="futurevNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Catalog/Index">Catalog</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Contact">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-page="/Privacy">Privacy</a></li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="text-secondary small text-uppercase">Passphrase: <strong>admin</strong></span>
+                        <a class="btn btn-outline-primary btn-sm" asp-area="" asp-page="/Admin/Login">Admin Deck</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="flex-grow-1">
+        @RenderBody()
+    </main>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container d-flex flex-column flex-lg-row justify-content-between align-items-center gap-2">
+            <span>&copy; @DateTime.UtcNow.Year FutureV Labs</span>
+            <span class="text-secondary small">Imagining mobility beyond the horizon.</span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
