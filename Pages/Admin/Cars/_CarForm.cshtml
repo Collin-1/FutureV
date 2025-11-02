@@ -90,13 +90,15 @@
                         Add Image
                     </button>
                 </div>
-                <p class="text-muted">Capture front, rear, side, hover, and interior perspectives. URLs can be local assets or CDN links.</p>
+                <p class="text-muted">Capture front, rear, side, hover, and interior perspectives. Use a hosted URL or upload an image file for each gallery angle.</p>
 
                 <div class="d-flex flex-column gap-3" data-image-list>
                     @for (var i = 0; i < Model.Images.Count; i++)
                     {
                         <div class="border p-3 rounded position-relative" data-image-item>
                             <input type="hidden" name="Images.Index" value="@i" />
+                            <input type="hidden" asp-for="Images[i].Id" />
+                            <input type="hidden" asp-for="Images[i].HasStoredImage" />
                             <div class="mb-2">
                                 <label class="form-label" asp-for="Images[i].ViewAngle"></label>
                                 <input class="form-control" asp-for="Images[i].ViewAngle" />
@@ -105,8 +107,23 @@
                             <div class="mb-2">
                                 <label class="form-label" asp-for="Images[i].ImageUrl"></label>
                                 <input class="form-control" asp-for="Images[i].ImageUrl" />
+                                <div class="form-text">Optional when uploading an image.</div>
                                 <span class="text-danger" asp-validation-for="Images[i].ImageUrl"></span>
                             </div>
+                            <div class="mb-2">
+                                <label class="form-label" asp-for="Images[i].ImageFile"></label>
+                                <input class="form-control" asp-for="Images[i].ImageFile" type="file" accept="image/*" />
+                                <span class="text-danger" asp-validation-for="Images[i].ImageFile"></span>
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(Model.Images[i].ExistingImageSource))
+                            {
+                                <div class="mb-2">
+                                    <div class="ratio ratio-4x3 bg-dark-subtle rounded overflow-hidden">
+                                        <img src="@Model.Images[i].ExistingImageSource" class="w-100 h-100 object-fit-cover" alt="Preview of @Model.Images[i].ViewAngle image" />
+                                    </div>
+                                    <small class="text-muted d-block mt-2">Current image preview</small>
+                                </div>
+                            }
                             <div class="mb-2">
                                 <label class="form-label" asp-for="Images[i].Description"></label>
                                 <input class="form-control" asp-for="Images[i].Description" />

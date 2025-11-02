@@ -4,6 +4,8 @@ using FutureV.Services;
 using FutureV.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using System.Linq;
 
 namespace FutureV.Pages.Admin.Cars;
 
@@ -53,9 +55,12 @@ public class EditModel : AdminPageModel
                 .OrderBy(image => image.Id)
                 .Select(image => new CarImageInputModel
                 {
+                    Id = image.Id,
                     ViewAngle = image.ViewAngle,
                     ImageUrl = image.ImageUrl,
-                    Description = image.Description
+                    Description = image.Description,
+                    HasStoredImage = image.ImageData is { Length: > 0 },
+                    ExistingImageSource = image.GetImageSource()
                 })
                 .ToList()
         };
@@ -99,15 +104,54 @@ public class EditModel : AdminPageModel
         entity.ReleaseYear = Car.ReleaseYear;
         entity.Narrative = Car.Narrative;
 
-        var updatedImages = Car.Images
-            .Where(image => !string.IsNullOrWhiteSpace(image.ImageUrl))
-            .Select(image => new CarImage
+        var existingImages = entity.Images.ToDictionary(image => image.Id);
+        var updatedImages = new List<CarImage>();
+
+        foreach (var image in Car.Images)
+        {
+            if (!image.HasAnySource())
+            {
+                continue;
+            }
+
+            var galleryImage = new CarImage
             {
                 ViewAngle = image.ViewAngle,
-                ImageUrl = image.ImageUrl,
                 Description = image.Description
-            })
-            .ToList();
+            };
+
+            if (image.ImageFile is { Length: > 0 })
+            {
+                using var memoryStream = new MemoryStream();
+                await image.ImageFile.CopyToAsync(memoryStream);
+                galleryImage.ImageData = memoryStream.ToArray();
+                galleryImage.ContentType = image.ImageFile.ContentType;
+                galleryImage.FileName = Path.GetFileName(image.ImageFile.FileName);
+                galleryImage.ImageUrl = null;
+            }
+            else if (!string.IsNullOrWhiteSpace(image.ImageUrl))
+            {
+                galleryImage.ImageUrl = image.ImageUrl;
+                galleryImage.ImageData = null;
+                galleryImage.ContentType = null;
+                galleryImage.FileName = null;
+            }
+            else if (image.HasStoredImage && image.Id.HasValue && existingImages.TryGetValue(image.Id.Value, out var existingImage))
+            {
+                galleryImage.ImageUrl = existingImage.ImageUrl;
+                galleryImage.ImageData = existingImage.ImageData;
+                galleryImage.ContentType = existingImage.ContentType;
+                galleryImage.FileName = existingImage.FileName;
+            }
+
+            updatedImages.Add(galleryImage);
+        }
+
+        if (updatedImages.Count == 0)
+        {
+            ModelState.AddModelError("Car.Images", "Add at least one image for the vehicle gallery.");
+            return Page();
+        }
 
         entity.Images.Clear();
         foreach (var image in updatedImages)

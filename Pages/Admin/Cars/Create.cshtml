@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <partial name="/Pages/Admin/Cars/_CarForm.cshtml" model="Model.Car" />
         <div class="mt-4 d-flex justify-content-end gap-2">
             <a class="btn btn-light" asp-page="Index">Cancel</a>

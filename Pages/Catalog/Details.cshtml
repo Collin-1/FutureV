@@ -44,8 +44,18 @@
                         @for (var i = 0; i < Model.Car.Images.Count; i++)
                         {
                             var image = Model.Car.Images.ElementAt(i);
+                            var imageSource = image.GetImageSource();
                             <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
-                                <img src="@image.ImageUrl" class="d-block w-100" alt="@image.ViewAngle view of @Model.Car.Name" />
+                                @if (!string.IsNullOrWhiteSpace(imageSource))
+                                {
+                                    <img src="@imageSource" class="d-block w-100" alt="@image.ViewAngle view of @Model.Car.Name" />
+                                }
+                                else
+                                {
+                                    <div class="ratio ratio-16x9 bg-dark-subtle d-flex align-items-center justify-content-center">
+                                        <span class="text-secondary text-uppercase">Image unavailable</span>
+                                    </div>
+                                }
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>@image.ViewAngle</h5>
                                     @if (!string.IsNullOrEmpty(image.Description))

@@ -6,13 +6,13 @@ A .NET 9 Razor Pages eCommerce experience showcasing speculative futuristic vehi
 
 - **Catalog storytelling**: Landing page tiles and detailed vehicle pages mix specs with narrative copy and multi-angle imagery.
 - **Admin deck**: Passphrase-protected CRUD workflows for vehicles and their image galleries with client-side helpers for dynamic image inputs.
-- **SQLite persistence**: Entity Framework Core with seeding for three concept cars and cascade image management.
+- **PostgreSQL persistence**: Entity Framework Core with seeding for three concept cars and cascade image management.
 - **Responsive styling**: Futuristic gradient palette, card polish, and carousel previews powered by Bootstrap 5 and custom CSS.
 
 ## Tech Stack
 
 - .NET 9 Razor Pages
-- Entity Framework Core 9 + SQLite
+- Entity Framework Core 9 + PostgreSQL (Npgsql)
 - Bootstrap 5 + custom theming
 
 ## Getting Started
@@ -20,15 +20,20 @@ A .NET 9 Razor Pages eCommerce experience showcasing speculative futuristic vehi
 1. **Install prerequisites**
 
    - [.NET SDK 9.0](https://dotnet.microsoft.com/download)
+   - PostgreSQL 16+ locally, or a managed instance such as [Neon](https://neon.tech)
 
-2. **Restore & build**
+2. **Configure the connection string**
+
+   Update `appsettings.Development.json` (local) or `appsettings.json` (deployment) with credentials for your PostgreSQL instance. The defaults target `postgres:postgres` on `localhost` using a database named `futurev_dev`.
+
+3. **Restore & build**
 
    ```powershell
    dotnet restore
    dotnet build
    ```
 
-3. **Apply migrations & seed data**
+4. **Apply migrations & seed data**
 
    ```powershell
    dotnet ef database update
@@ -36,11 +41,22 @@ A .NET 9 Razor Pages eCommerce experience showcasing speculative futuristic vehi
 
    The first launch runs additional seeding logic in `SeedData.InitializeAsync`.
 
-4. **Run the site**
+5. **Run the site**
    ```powershell
    dotnet run
    ```
    Navigate to `https://localhost:5001` (or the port reported in the console).
+
+## Deploying to Render
+
+- **Prerequisites**: A free Render account and access to the Render Dashboard.
+- **Blueprint deploy**: Connect this repository and pick _Deploy from render.yaml_. The blueprint provisions a free web service and managed PostgreSQL instance.
+- **First deploy flow**:
+  1.  Render runs the `Dockerfile`, publishing the app to a container listening on port 8080.
+  2.  The managed database connection string is injected via `ConnectionStrings__DefaultConnection` / `DATABASE_URL`.
+  3.  After the container starts, Render performs a health check on `/` and your site goes live at the Render-provided URL.
+- **Database migrations**: In Render’s _Shell_ tab (or via `render-cli`), run `dotnet ef database update` to apply the latest migrations.
+- **Configuration knobs**: Override settings with additional environment variables under _Environment_ → _Add Environment Variable_. Common additions include `ADMIN_PASSPHRASE` and `Logging__LogLevel__Default`.
 
 ## Admin Access
 

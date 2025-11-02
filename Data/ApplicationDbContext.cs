@@ -21,6 +21,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<CarImage>(entity =>
         {
             entity.Property(image => image.ImageUrl).HasMaxLength(500);
+            entity.Property(image => image.ContentType).HasMaxLength(120);
+            entity.Property(image => image.FileName).HasMaxLength(260);
             entity.HasOne(image => image.Car)
                   .WithMany(car => car.Images)
                   .HasForeignKey(image => image.CarId)

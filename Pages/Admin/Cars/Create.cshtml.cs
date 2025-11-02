@@ -4,6 +4,7 @@ using FutureV.Services;
 using FutureV.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace FutureV.Pages.Admin.Cars;
 
@@ -40,12 +41,6 @@ public class CreateModel : AdminPageModel
             return Page();
         }
 
-        if (!Car.Images.Any())
-        {
-            ModelState.AddModelError("Car.Images", "Add at least one image for the vehicle gallery.");
-            return Page();
-        }
-
         using var transaction = await _context.Database.BeginTransactionAsync();
 
         var entity = new Car
@@ -66,14 +61,44 @@ public class CreateModel : AdminPageModel
             Narrative = Car.Narrative
         };
 
-        foreach (var image in Car.Images.Where(img => !string.IsNullOrWhiteSpace(img.ImageUrl)))
+        foreach (var image in Car.Images)
         {
-            entity.Images.Add(new CarImage
+            if (!image.HasAnySource())
+            {
+                continue;
+            }
+
+            var galleryImage = new CarImage
             {
                 ViewAngle = image.ViewAngle,
-                ImageUrl = image.ImageUrl,
                 Description = image.Description
-            });
+            };
+
+            if (image.ImageFile is { Length: > 0 })
+            {
+                using var memoryStream = new MemoryStream();
+                await image.ImageFile.CopyToAsync(memoryStream);
+                galleryImage.ImageData = memoryStream.ToArray();
+                galleryImage.ContentType = image.ImageFile.ContentType;
+                galleryImage.FileName = Path.GetFileName(image.ImageFile.FileName);
+                galleryImage.ImageUrl = null;
+            }
+            else if (!string.IsNullOrWhiteSpace(image.ImageUrl))
+            {
+                galleryImage.ImageUrl = image.ImageUrl;
+                galleryImage.ImageData = null;
+                galleryImage.ContentType = null;
+                galleryImage.FileName = null;
+            }
+
+            entity.Images.Add(galleryImage);
+        }
+
+        if (entity.Images.Count == 0)
+        {
+            ModelState.AddModelError("Car.Images", "Add at least one image for the vehicle gallery.");
+            await transaction.RollbackAsync();
+            return Page();
         }
 
         _context.Cars.Add(entity);
