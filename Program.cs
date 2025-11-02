@@ -1,6 +1,5 @@
 using FutureV.Data;
 using FutureV.Services;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -45,19 +44,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-var forwardedHeadersOptions = new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-};
-forwardedHeadersOptions.KnownNetworks.Clear();
-forwardedHeadersOptions.KnownProxies.Clear();
-app.UseForwardedHeaders(forwardedHeadersOptions);
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
-app.UseStaticFiles();
+app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
