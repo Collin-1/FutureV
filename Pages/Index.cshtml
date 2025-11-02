@@ -41,9 +41,9 @@
                 <div class="col-md-6 col-xl-4">
                     <div class="card h-100 shadow-sm border-0 overflow-hidden">
                         <div class="ratio ratio-16x9 bg-dark-subtle">
-                            @if (!string.IsNullOrEmpty(car.HeroImageUrl))
+                            @if (!string.IsNullOrEmpty(car.HeroImageSrc))
                             {
-                                <img src="@car.HeroImageUrl" class="w-100 h-100 object-fit-cover" alt="@car.Name concept render" />
+                                <img src="@car.HeroImageSrc" class="w-100 h-100 object-fit-cover" alt="@car.Name concept render" />
                             }
                             else
                             {

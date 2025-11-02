@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: futurev-web
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: futurev-db
+          property: connectionString
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:8080
+      - key: DOTNET_ENVIRONMENT
+        value: Production
+
+# Provision a free managed PostgreSQL instance on Render.
+# The generated connection string will be exposed as both DATABASE_URL and
+# ConnectionStrings__DefaultConnection for the app configuration.
+
+databases:
+  - name: futurev-db
+    plan: free
+    databaseName: futurev
+    user: futurev_user

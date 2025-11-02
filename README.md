@@ -47,6 +47,17 @@ A .NET 9 Razor Pages eCommerce experience showcasing speculative futuristic vehi
    ```
    Navigate to `https://localhost:5001` (or the port reported in the console).
 
+## Deploying to Render
+
+- **Prerequisites**: A free Render account and access to the Render Dashboard.
+- **Blueprint deploy**: Connect this repository and pick _Deploy from render.yaml_. The blueprint provisions a free web service and managed PostgreSQL instance.
+- **First deploy flow**:
+  1.  Render runs the `Dockerfile`, publishing the app to a container listening on port 8080.
+  2.  The managed database connection string is injected via `ConnectionStrings__DefaultConnection` / `DATABASE_URL`.
+  3.  After the container starts, Render performs a health check on `/` and your site goes live at the Render-provided URL.
+- **Database migrations**: In Render’s _Shell_ tab (or via `render-cli`), run `dotnet ef database update` to apply the latest migrations.
+- **Configuration knobs**: Override settings with additional environment variables under _Environment_ → _Add Environment Variable_. Common additions include `ADMIN_PASSPHRASE` and `Logging__LogLevel__Default`.
+
 ## Admin Access
 
 - Visit `/admin/login` and enter the passphrase `admin` ("thin" per the design brief).

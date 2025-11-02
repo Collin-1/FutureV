@@ -38,6 +38,8 @@
         const template = (index) => `
             <div class="border p-3 rounded position-relative" data-image-item>
                 <input type="hidden" name="Images.Index" value="${index}" />
+                <input type="hidden" id="Images_${index}__Id" name="Images[${index}].Id" />
+                <input type="hidden" id="Images_${index}__HasStoredImage" name="Images[${index}].HasStoredImage" value="false" />
                 <div class="mb-2">
                     <label class="form-label" for="Images_${index}__ViewAngle">View Angle</label>
                     <input class="form-control" type="text" id="Images_${index}__ViewAngle" name="Images[${index}].ViewAngle" />
@@ -45,6 +47,11 @@
                 <div class="mb-2">
                     <label class="form-label" for="Images_${index}__ImageUrl">Image URL</label>
                     <input class="form-control" type="url" id="Images_${index}__ImageUrl" name="Images[${index}].ImageUrl" />
+                    <div class="form-text">Optional when uploading an image.</div>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label" for="Images_${index}__ImageFile">Upload Image</label>
+                    <input class="form-control" type="file" id="Images_${index}__ImageFile" name="Images[${index}].ImageFile" accept="image/*" />
                 </div>
                 <div class="mb-2">
                     <label class="form-label" for="Images_${index}__Description">Description</label>

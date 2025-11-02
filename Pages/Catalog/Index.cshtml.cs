@@ -1,6 +1,7 @@
 using FutureV.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace FutureV.Pages.Catalog;
 
@@ -12,9 +13,12 @@ public class IndexModel(ApplicationDbContext context) : PageModel
 
     public async Task OnGetAsync()
     {
-        Cars = await _context.Cars
+        var cars = await _context.Cars
             .Include(car => car.Images)
             .OrderBy(car => car.Name)
+            .ToListAsync();
+
+        Cars = cars
             .Select(car => new CatalogItem(
                 car.Id,
                 car.Name,
@@ -28,9 +32,9 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 car.ZeroToSixty,
                 car.Images
                     .OrderBy(image => image.Id)
-                    .Select(image => image.ImageUrl)
+                    .Select(image => image.GetImageSource())
                     .FirstOrDefault()))
-            .ToListAsync();
+            .ToList();
     }
 
     public record CatalogItem(
@@ -44,6 +48,6 @@ public class IndexModel(ApplicationDbContext context) : PageModel
         int Range,
         int TopSpeed,
         double ZeroToSixty,
-        string? HeroImageUrl
+        string? HeroImageSrc
     );
 }
