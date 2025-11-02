@@ -32,6 +32,6 @@ Thumbs.db
 # EF migration backups
 Migrations/*.Designer.cs.bak
 
-
-/wwwroot/lib/ 
+# Allow library assets to be committed so deployments retain Bootstrap, jQuery, etc.
+#/wwwroot/lib/
 .github/
