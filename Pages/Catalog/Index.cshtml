@@ -4,74 +4,61 @@
     ViewData["Title"] = "Catalog";
 }
 
-<section class="bg-dark text-light py-5">
+<section class="fv-hero" style="padding-block: 5.5rem;">
     <div class="container">
-        <h1 class="display-4 fw-bold">FutureV Catalog</h1>
-        <p class="lead">Browse the fleet of concept vehicles, each tuned with speculative tech specs and immersive visuals.</p>
+        <div class="fv-hero__content">
+            <p class="fv-hero__kicker">FutureV catalog</p>
+            <h1 class="fv-hero__title">Curated fleet dossier</h1>
+            <p class="fv-hero__desc">Dive into the full collection of FutureV prototypes. Every profile balances raw telemetry with crafted storytelling to help investors and enthusiasts experience tomorrow’s mobility, today.</p>
+        </div>
     </div>
 </section>
 
-<section class="container py-5">
-    <div class="row g-4">
+<section class="fv-section">
+    <div class="container">
         @if (Model.Cars.Count == 0)
         {
-            <div class="col-12">
-                <div class="alert alert-info shadow-sm">
-                    The catalog is waiting for its first concept. Visit the <a class="alert-link" asp-page="/Admin/Login">admin deck</a> to launch a vehicle.
-                </div>
+            <div class="fv-pane text-center">
+                <div class="fv-pane__title">Fleet awaiting launch</div>
+                <p class="fv-pane__info">Visit the <a asp-page="/Admin/Login">admin deck</a> to add the first concept to this gallery.</p>
             </div>
         }
         else
         {
-            foreach (var car in Model.Cars)
-            {
-                <div class="col-md-6 col-xl-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="ratio ratio-16x9 bg-dark-subtle">
+            <div class="fv-grid fv-grid--cards">
+                @foreach (var car in Model.Cars)
+                {
+                    <article class="fv-card">
+                        <div class="fv-card__visual">
                             @if (!string.IsNullOrEmpty(car.HeroImageSrc))
                             {
-                                <img src="@car.HeroImageSrc" class="w-100 h-100 object-fit-cover" alt="@car.Name concept render" />
+                                <img src="@car.HeroImageSrc" alt="@car.Name concept render" />
                             }
                             else
                             {
-                                <div class="d-flex align-items-center justify-content-center h-100 text-uppercase fw-semibold text-secondary">Image coming soon</div>
+                                <div class="d-flex align-items-center justify-content-center h-100">
+                                    <span class="fv-chip">Image incoming</span>
+                                </div>
                             }
                         </div>
-                        <div class="card-body d-flex flex-column">
-                            <h2 class="h4">@car.Name</h2>
-                            <p class="text-muted flex-grow-1">@car.Tagline</p>
-                            <div class="border-top pt-3 small text-secondary">
-                                <div class="d-flex justify-content-between">
-                                    <span>Autonomy</span>
-                                    <span>@car.Autonomy</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Drive</span>
-                                    <span>@car.DriveType</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Energy</span>
-                                    <span>@car.EnergySystem</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Range</span>
-                                    <span>@car.Range km</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>0-60 mph</span>
-                                    <span>@car.ZeroToSixty s</span>
-                                </div>
+                        <div class="fv-card__body">
+                            <span class="fv-chip">@car.Autonomy</span>
+                            <h2 class="fv-card__title">@car.Name</h2>
+                            <p class="text-muted">@car.Tagline</p>
+                            <div class="fv-card__meta">
+                                <span>@car.DriveType</span>
+                                <span>@car.EnergySystem</span>
+                                <span>@car.Range km range</span>
+                                <span>@car.ZeroToSixty s 0-60</span>
+                            </div>
+                            <div class="fv-card__footer">
+                                <span class="fv-price">@car.BasePrice.ToString("C0")</span>
+                                <a class="fv-pill-link" asp-page="Details" asp-route-id="@car.Id">Experience</a>
                             </div>
                         </div>
-                        <div class="card-footer bg-transparent border-0 pb-4 px-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-semibold">@car.BasePrice.ToString("C0")</span>
-                                <a class="btn btn-outline-primary btn-sm" asp-page="Details" asp-route-id="@car.Id">Experience</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
+                    </article>
+                }
+            </div>
         }
     </div>
 </section>
