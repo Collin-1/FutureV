@@ -1,4 +1,5 @@
 @page "{id:int}"
+@using System.Linq
 @model FutureV.Pages.Catalog.DetailsModel
 @{
     if (Model.Car is not null)
@@ -15,88 +16,124 @@
     return;
 }
 
-<section class="bg-dark text-light py-5">
+<section class="fv-section">
     <div class="container">
-        <h1 class="display-4 fw-bold">@Model.Car.Name</h1>
-        <p class="lead">@Model.Car.Tagline</p>
-        <div class="d-flex flex-wrap gap-3 small text-uppercase text-secondary">
-            <span>@Model.Car.AutonomyLevel</span>
-            <span>@Model.Car.DriveType</span>
-            <span>@Model.Car.EnergySystem</span>
-            <span>@Model.Car.PowerOutput</span>
-        </div>
-    </div>
-</section>
-
-<section class="container py-5">
-    <div class="row g-4">
-        <div class="col-lg-8">
-            @if (Model.Car.Images.Count == 0)
+        <div class="fv-page-header">
+            <div>
+                <p class="fv-section__title">Concept dossier</p>
+                <h1 class="fv-title-xl">@Model.Car.Name</h1>
+                @if (!string.IsNullOrWhiteSpace(Model.Car.Tagline))
+                {
+                    <p class="fv-page__lead">@Model.Car.Tagline</p>
+                }
+            </div>
+            @{
+                var detailMeta = new[]
+                {
+                    Model.Car.AutonomyLevel,
+                    Model.Car.DriveType,
+                    Model.Car.EnergySystem,
+                    Model.Car.PowerOutput
+                }
+                .Where(value => !string.IsNullOrWhiteSpace(value))
+                .ToList();
+            }
+            @if (detailMeta.Count > 0)
             {
-                <div class="ratio ratio-16x9 bg-dark-subtle d-flex align-items-center justify-content-center rounded shadow-sm">
-                    <span class="text-secondary text-uppercase">Gallery coming soon</span>
+                <div class="fv-detail-meta">
+                    @foreach (var value in detailMeta)
+                    {
+                        <span>@value</span>
+                    }
                 </div>
             }
-            else
-            {
-                <div id="catalogCarousel" class="carousel slide shadow-sm rounded" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        @for (var i = 0; i < Model.Car.Images.Count; i++)
-                        {
-                            var image = Model.Car.Images.ElementAt(i);
-                            var imageSource = image.GetImageSource();
-                            <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
-                                @if (!string.IsNullOrWhiteSpace(imageSource))
+        </div>
+        <div class="row g-5">
+            <div class="col-lg-8">
+                @if (Model.Car.Images.Count == 0)
+                {
+                    <div class="fv-pane text-center">
+                        <div class="fv-pane__title">Gallery coming soon</div>
+                        <p class="fv-pane__info">Visuals will unlock once the concept team releases first renders.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="fv-gallery">
+                        <div id="catalogCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @for (var i = 0; i < Model.Car.Images.Count; i++)
                                 {
-                                    <img src="@imageSource" class="d-block w-100" alt="@image.ViewAngle view of @Model.Car.Name" />
-                                }
-                                else
-                                {
-                                    <div class="ratio ratio-16x9 bg-dark-subtle d-flex align-items-center justify-content-center">
-                                        <span class="text-secondary text-uppercase">Image unavailable</span>
+                                    var image = Model.Car.Images.ElementAt(i);
+                                    var imageSource = image.GetImageSource();
+                                    <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
+                                        @if (!string.IsNullOrWhiteSpace(imageSource))
+                                        {
+                                            <img src="@imageSource" class="d-block w-100" alt="@image.ViewAngle view of @Model.Car.Name" />
+                                        }
+                                        else
+                                        {
+                                            <div class="ratio ratio-16x9 bg-dark-subtle d-flex align-items-center justify-content-center">
+                                                <span class="text-secondary text-uppercase">Image unavailable</span>
+                                            </div>
+                                        }
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5>@image.ViewAngle</h5>
+                                            @if (!string.IsNullOrEmpty(image.Description))
+                                            {
+                                                <p>@image.Description</p>
+                                            }
+                                        </div>
                                     </div>
                                 }
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>@image.ViewAngle</h5>
-                                    @if (!string.IsNullOrEmpty(image.Description))
-                                    {
-                                        <p>@image.Description</p>
-                                    }
-                                </div>
                             </div>
-                        }
+                            <button class="carousel-control-prev" type="button" data-bs-target="#catalogCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#catalogCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#catalogCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#catalogCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            }
-        </div>
-        <div class="col-lg-4">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h2 class="h4">Investment</h2>
-                    <p class="display-6 fw-bold">@Model.Car.BasePrice.ToString("C0")</p>
-                    <ul class="list-unstyled text-secondary small">
-                        <li>Range: @Model.Car.RangePerCharge km</li>
-                        <li>Top Speed: @Model.Car.TopSpeed km/h</li>
-                        <li>0-60 mph: @Model.Car.ZeroToSixty s</li>
-                        <li>Fast Charge: @Model.Car.FastChargeMinutes minutes</li>
-                        <li>Seating: @Model.Car.SeatingCapacity explorers</li>
-                        <li>Release Year: @Model.Car.ReleaseYear</li>
-                    </ul>
-                    <a class="btn btn-primary" asp-page="/Contact" asp-route-car="@Model.Car.Name">Request a prototype</a>
-                </div>
+                }
             </div>
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="h5">Story</h2>
-                    <p class="mb-0">@Model.Car.Narrative</p>
+            <div class="col-lg-4">
+                <div class="fv-pane mb-4">
+                    <div class="fv-pane__title">Investment</div>
+                    <h2 class="display-6 fw-bold">@Model.Car.BasePrice.ToString("C0")</h2>
+                    <div class="fv-metric-grid mt-4">
+                        <div class="fv-metric-card">
+                            <span>Range</span>
+                            <strong>@Model.Car.RangePerCharge km</strong>
+                        </div>
+                        <div class="fv-metric-card">
+                            <span>Top speed</span>
+                            <strong>@Model.Car.TopSpeed km/h</strong>
+                        </div>
+                        <div class="fv-metric-card">
+                            <span>0-60 mph</span>
+                            <strong>@Model.Car.ZeroToSixty s</strong>
+                        </div>
+                        <div class="fv-metric-card">
+                            <span>Fast charge</span>
+                            <strong>@Model.Car.FastChargeMinutes min</strong>
+                        </div>
+                        <div class="fv-metric-card">
+                            <span>Seating</span>
+                            <strong>@Model.Car.SeatingCapacity explorers</strong>
+                        </div>
+                        <div class="fv-metric-card">
+                            <span>Release year</span>
+                            <strong>@Model.Car.ReleaseYear</strong>
+                        </div>
+                    </div>
+                    <a class="fv-btn mt-4" asp-page="/Contact" asp-route-car="@Model.Car.Name">Request prototype</a>
+                </div>
+                <div class="fv-pane">
+                    <div class="fv-pane__title">Storyline</div>
+                    <p class="fv-pane__info mb-0">@Model.Car.Narrative</p>
                 </div>
             </div>
         </div>

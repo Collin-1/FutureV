@@ -4,89 +4,119 @@
     ViewData["Title"] = "FutureV";
 }
 
-<header class="bg-dark text-light py-5">
+<section class="fv-hero fv-hero--video">
+    <video class="fv-hero__video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+        <source src="/videos/Futuristic Car Flies Through City.mp4" type="video/mp4" />
+    </video>
     <div class="container">
-        <div class="row align-items-center">
+        <div class="row align-items-center g-5">
             <div class="col-lg-7">
-                <h1 class="display-4 fw-bold">FutureV</h1>
-                <p class="lead mb-4">An eCommerce playground for visionary vehicles. Explore kinetic concepts engineered for the cities of 2035 and beyond.</p>
-                <a class="btn btn-outline-light btn-lg" asp-page="/Catalog/Index">View Full Catalog</a>
+                <div class="fv-hero__content">
+                    <p class="fv-hero__kicker">Neon mobility lab</p>
+                    <h1 class="fv-hero__title">FutureV</h1>
+                    <p class="fv-hero__desc">Experience concept vehicles shaped for orbital skylines and subterranean expressways. FutureV merges autonomous intelligence, plasma propulsion, and couture interiors into one frictionless catalog.</p>
+                    <div class="fv-hero__cta">
+                        <a class="fv-btn" asp-page="/Catalog/Index">View catalog</a>
+                        <a class="fv-pill-link" asp-page="/Admin/Login">Admin deck</a>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-5 text-lg-end mt-4 mt-lg-0">
-                <span class="badge bg-primary-subtle text-primary-emphasis fs-6">Autonomy • Mag-lev • Plasma Drive</span>
+            <div class="col-lg-5">
+                <div class="fv-hero__metrics">
+                    <div class="fv-hero__metric">
+                        <span>Autonomy</span>
+                        <strong>Level 5 suites</strong>
+                    </div>
+                    <div class="fv-hero__metric">
+                        <span>Range</span>
+                        <strong>Up to 1 000 km</strong>
+                    </div>
+                    <div class="fv-hero__metric">
+                        <span>Acceleration</span>
+                        <strong>1.7s • 0-60 mph</strong>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</header>
+</section>
 
-<section class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="h3 mb-0">Latest Concepts</h2>
-        <a class="link-secondary" asp-page="/Catalog/Index">See everything</a>
-    </div>
+<section class="fv-section">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-5">
+            <div>
+                <div class="fv-section__title">Latest concepts</div>
+                <h2 class="fv-title-lg">Carbon fibre dreams in motion</h2>
+            </div>
+            <a class="fv-pill-link" asp-page="/Catalog/Index">See full fleet</a>
+        </div>
 
-    <div class="row g-4">
-    @if (Model.Cars.Count == 0)
+        @if (Model.Cars.Count == 0)
         {
-            <div class="col-12">
-                <div class="alert alert-info shadow-sm">
-                    No concepts are live yet. Enter the <a class="alert-link" asp-page="/Admin/Login">admin deck</a> to seed the fleet.
-                </div>
+            <div class="fv-pane text-center">
+                <div class="fv-pane__title">No concepts live yet</div>
+                <p class="fv-pane__info">Enter the <a asp-page="/Admin/Login">admin deck</a> to seed the fleet with visionary mobility.</p>
             </div>
         }
         else
         {
-            foreach (var car in Model.Cars)
-            {
-                <div class="col-md-6 col-xl-4">
-                    <div class="card h-100 shadow-sm border-0 overflow-hidden">
-                        <div class="ratio ratio-16x9 bg-dark-subtle">
+            <div class="fv-grid fv-grid--cards">
+                @foreach (var car in Model.Cars)
+                {
+                    <article class="fv-card">
+                        <div class="fv-card__visual">
                             @if (!string.IsNullOrEmpty(car.HeroImageSrc))
                             {
-                                <img src="@car.HeroImageSrc" class="w-100 h-100 object-fit-cover" alt="@car.Name concept render" />
+                                <img src="@car.HeroImageSrc" alt="@car.Name concept render" />
                             }
                             else
                             {
-                                <div class="d-flex align-items-center justify-content-center h-100 text-uppercase fw-semibold text-secondary">Image coming soon</div>
+                                <div class="d-flex align-items-center justify-content-center h-100">
+                                    <span class="fv-chip">Image incoming</span>
+                                </div>
                             }
                         </div>
-                        <div class="card-body">
-                            <span class="badge bg-primary-subtle text-primary-emphasis mb-2">@car.Autonomy</span>
-                            <h3 class="h4">@car.Name</h3>
+                        <div class="fv-card__body">
+                            <span class="fv-chip">@car.Autonomy</span>
+                            <h3 class="fv-card__title">@car.Name</h3>
                             <p class="text-muted">@car.Tagline</p>
-                            <div class="d-flex justify-content-between text-secondary small">
+                            <div class="fv-card__meta">
                                 <span>@car.Range km range</span>
                                 <span>@car.TopSpeed km/h peak</span>
                                 <span>@car.ZeroToSixty s to 60</span>
                             </div>
-                        </div>
-                        <div class="card-footer bg-transparent border-0 pt-0 pb-4 px-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="fw-semibold">@car.BasePrice.ToString("C0")</div>
-                                <a class="btn btn-outline-primary btn-sm" asp-page="/Catalog/Details" asp-route-id="@car.Id">View specs</a>
+                            <div class="fv-card__footer">
+                                <span class="fv-price">@car.BasePrice.ToString("C0")</span>
+                                <a class="fv-pill-link" asp-page="/Catalog/Details" asp-route-id="@car.Id">Explore</a>
                             </div>
                         </div>
-                    </div>
-                </div>
-            }
+                    </article>
+                }
+            </div>
         }
     </div>
 </section>
 
-<section class="bg-body-secondary py-5">
+<section class="fv-section fv-section--contrast">
     <div class="container">
-        <div class="row g-4">
+        <div class="row g-5">
             <div class="col-md-4">
-                <h3 class="h5">Immersive Galleries</h3>
-                <p class="text-muted">Each concept features multi-angle imagery so prospects can orbit the vehicle from their browser.</p>
+                <div class="fv-feature">
+                    <div class="fv-feature__title">Immersive galleries</div>
+                    <p class="fv-feature__text">Orbit each vehicle with multi-angle imagery, motion-ready ratios, and curated captions that surface the design intent.</p>
+                </div>
             </div>
             <div class="col-md-4">
-                <h3 class="h5">Spec Storytelling</h3>
-                <p class="text-muted">Technical data meets cosmic copywriting to set the tone for your innovation studio.</p>
+                <div class="fv-feature">
+                    <div class="fv-feature__title">Spec storytelling</div>
+                    <p class="fv-feature__text">Blend range, charge, and propulsion data with editorial copy to introduce concepts like a product launch moment.</p>
+                </div>
             </div>
             <div class="col-md-4">
-                <h3 class="h5">Admin Control</h3>
-                <p class="text-muted">Launch the <strong>admin</strong> deck to author, edit, or retire vehicles rapidly during product sprints.</p>
+                <div class="fv-feature">
+                    <div class="fv-feature__title">Rapid control</div>
+                    <p class="fv-feature__text">Unlock the admin deck with a single passphrase to seed prototypes, update specs, or sunset a narrative instantly.</p>
+                </div>
             </div>
         </div>
     </div>
