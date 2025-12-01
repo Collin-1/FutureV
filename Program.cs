@@ -48,11 +48,16 @@ app.UseResponseCaching();
 
 app.UseAuthorization();
 
+
 app.MapStaticAssets();
 app.MapControllerRoute(
     name: "catalog",
     pattern: "catalog/{id:int}",
     defaults: new { controller = "Catalog", action = "Details" });
+app.MapControllerRoute(
+    name: "discover",
+    pattern: "discover",
+    defaults: new { controller = "Discover", action = "Index" });
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")

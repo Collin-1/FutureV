@@ -1,4 +1,3 @@
-@model List<FutureV.Controllers.HomeController.CarSummary>
 @{
     ViewData["Title"] = "FutureV";
 }
@@ -16,7 +15,7 @@
                     <p class="fv-hero__desc">Experience concept vehicles shaped for orbital skylines and subterranean expressways. FutureV merges autonomous intelligence, plasma propulsion, and couture interiors into one frictionless catalog.</p>
                     <div class="fv-hero__cta">
                         <a class="fv-btn" asp-controller="Catalog" asp-action="Index">View catalog</a>
-                        <a class="fv-pill-link" asp-controller="Admin" asp-action="Login">Admin deck</a>
+                        <a class="fv-pill-link" asp-controller="Home" asp-action="Contact">Request prototype</a>
                     </div>
                 </div>
             </div>
@@ -40,64 +39,39 @@
     </div>
 </section>
 
-<section class="fv-section">
+<section class="fv-section fv-highlight-banner">
     <div class="container">
-        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-5">
-            <div>
-                <div class="fv-section__title">Latest concepts</div>
-                <h2 class="fv-title-lg">Carbon fibre dreams in motion</h2>
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="fv-image-card">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80" alt="Futuristic vehicle concept" />
+                    <div class="fv-image-overlay">
+                        <div class="fv-section__title">Featured concept</div>
+                        <h3 class="h2 mb-3">Quantum series arriving 2030</h3>
+                        <a class="fv-pill-link" asp-controller="Arriving" asp-action="Index">Explore Arriving</a>
+                    </div>
+                </div>
             </div>
-            <a class="fv-pill-link" asp-controller="Catalog" asp-action="Index">See full fleet</a>
+            <div class="col-lg-6">
+                <div class="fv-image-card">
+                    <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80" alt="Advanced automotive technology" />
+                    <div class="fv-image-overlay">
+                        <div class="fv-section__title">Innovation</div>
+                        <h3 class="h2 mb-3">Autonomous intelligence redefined</h3>
+                        <a class="fv-pill-link" asp-controller="Discover" asp-action="Index">Discover more</a>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        @if (Model.Count == 0)
-        {
-            <div class="fv-pane text-center">
-                <div class="fv-pane__title">No concepts live yet</div>
-                <p class="fv-pane__info">Enter the <a asp-controller="Admin" asp-action="Login">admin deck</a> to seed the fleet with visionary mobility.</p>
-            </div>
-        }
-        else
-        {
-            <div class="fv-grid fv-grid--cards">
-                @foreach (var car in Model)
-                {
-                    <article class="fv-card">
-                        <div class="fv-card__visual">
-                            @if (!string.IsNullOrEmpty(car.HeroImageSrc))
-                            {
-                                <img src="@car.HeroImageSrc" alt="@car.Name concept render" />
-                            }
-                            else
-                            {
-                                <div class="d-flex align-items-center justify-content-center h-100">
-                                    <span class="fv-chip">Image incoming</span>
-                                </div>
-                            }
-                        </div>
-                        <div class="fv-card__body">
-                            <span class="fv-chip">@car.Autonomy</span>
-                            <h3 class="fv-card__title">@car.Name</h3>
-                            <p class="text-muted">@car.Tagline</p>
-                            <div class="fv-card__meta">
-                                <span>@car.Range km range</span>
-                                <span>@car.TopSpeed km/h peak</span>
-                                <span>@car.ZeroToSixty s to 60</span>
-                            </div>
-                            <div class="fv-card__footer">
-                                <span class="fv-price">@car.BasePrice.ToString("C0")</span>
-                                <a class="fv-pill-link" asp-controller="Catalog" asp-action="Details" asp-route-id="@car.Id">Explore</a>
-                            </div>
-                        </div>
-                    </article>
-                }
-            </div>
-        }
     </div>
 </section>
 
 <section class="fv-section fv-section--contrast">
     <div class="container">
+        <div class="text-center mb-5">
+            <div class="fv-section__title">Why FutureV</div>
+            <h2 class="fv-title-lg">Innovation meets design</h2>
+        </div>
         <div class="row g-5">
             <div class="col-md-4">
                 <div class="fv-feature">
@@ -115,6 +89,50 @@
                 <div class="fv-feature">
                     <div class="fv-feature__title">Rapid control</div>
                     <p class="fv-feature__text">Unlock the admin deck with a single passphrase to seed prototypes, update specs, or sunset a narrative instantly.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="fv-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="fv-image-card fv-image-card--large">
+                    <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1600&q=80" alt="Electric vehicle technology" />
+                    <div class="fv-image-overlay">
+                        <div class="fv-section__title">Sustainability</div>
+                        <h3 class="fv-title-lg mb-3">The future is electric</h3>
+                        <p class="mb-4">Experience the next generation of sustainable mobility with zero-emission propulsion systems.</p>
+                        <a class="fv-btn" asp-controller="Catalog" asp-action="Index">Learn more</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="fv-image-card fv-image-card--tall">
+                    <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=800&q=80" alt="Advanced vehicle interior" />
+                    <div class="fv-image-overlay">
+                        <div class="fv-section__title">Design</div>
+                        <h3 class="h2 mb-3">Crafted interiors</h3>
+                        <a class="fv-pill-link" asp-controller="Catalog" asp-action="Index">Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="fv-section fv-cta-section">
+    <div class="container">
+        <div class="fv-image-card fv-image-card--cta">
+            <img src="https://images.unsplash.com/photo-1563720360172-67b8f3dce741?auto=format&fit=crop&w=1600&q=80" alt="Future of mobility" />
+            <div class="fv-image-overlay fv-image-overlay--center">
+                <h2 class="fv-title-lg mb-4">Ready to experience tomorrow?</h2>
+                <p class="fv-hero__desc mx-auto mb-4" style="max-width: 560px;">Connect with a FutureV curator to discuss prototype access, investment opportunities, or technology partnerships.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a class="fv-btn" asp-controller="Home" asp-action="Contact">Get in touch</a>
+                    <a class="fv-btn-outline" asp-controller="Catalog" asp-action="Index">Browse concepts</a>
                 </div>
             </div>
         </div>
