@@ -59,6 +59,10 @@ app.MapControllerRoute(
     pattern: "discover",
     defaults: new { controller = "Discover", action = "Index" });
 app.MapControllerRoute(
+    name: "arriving",
+    pattern: "arriving",
+    defaults: new { controller = "Arriving", action = "Index" });
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
