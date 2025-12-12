@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.Globalization;
-using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,10 +16,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<AdminAccessService>();
 
-builder.Services.AddRazorPages(options =>
-{
-    options.Conventions.AddPageRoute("/Catalog/Details", "/catalog/{id:int}");
-});
+builder.Services.AddResponseCaching();
+builder.Services.AddControllersWithViews();
 
 var culture = new CultureInfo("en-ZA");
 CultureInfo.DefaultThreadCurrentCulture = culture;
@@ -39,19 +36,35 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. Change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseResponseCaching();
 
 app.UseAuthorization();
 
+
 app.MapStaticAssets();
-app.MapRazorPages()
+app.MapControllerRoute(
+    name: "catalog",
+    pattern: "catalog/{id:int}",
+    defaults: new { controller = "Catalog", action = "Details" });
+app.MapControllerRoute(
+    name: "discover",
+    pattern: "discover",
+    defaults: new { controller = "Discover", action = "Index" });
+app.MapControllerRoute(
+    name: "arriving",
+    pattern: "arriving",
+    defaults: new { controller = "Arriving", action = "Index" });
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 await app.RunAsync();
