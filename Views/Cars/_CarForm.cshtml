@@ -80,16 +80,16 @@
     </div>
 
     <div class="col-12 col-lg-4">
-        <div class="fv-pane h-100">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="fv-pane h-100 position-sticky" style="top: 1rem; max-height: calc(100vh - 2rem); display: flex; flex-direction: column;">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-shrink-0">
                 <h2 class="fv-pane__title mb-0">Image Gallery</h2>
                 <button type="button" class="fv-btn-outline py-1 px-2" style="font-size: 0.65rem;" data-add-image>
                     Add Image
                 </button>
             </div>
-            <p class="fv-card__desc mb-4">Capture front, rear, side, hover, and interior perspectives. Use a hosted URL or upload an image file for each gallery angle.</p>
+            <p class="fv-card__desc mb-4 flex-shrink-0">Capture front, rear, side, hover, and interior perspectives. Use a hosted URL or upload an image file for each gallery angle.</p>
 
-                <div class="d-flex flex-column gap-3" data-image-list>
+            <div class="d-flex flex-column gap-3 overflow-y-auto pe-2" style="min-height: 0;" data-image-list>
                     @for (var i = 0; i < Model.Images.Count; i++)
                     {
                         <div class="p-3 rounded position-relative" style="background: rgba(255,255,255,0.03); border: 1px solid var(--fv-line);" data-image-item>
