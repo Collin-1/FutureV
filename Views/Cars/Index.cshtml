@@ -3,62 +3,75 @@
     ViewData["Title"] = "Manage Cars";
 }
 
-<section class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+<div class="container pt-5 pb-3">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-3">
         <div>
-            <h1 class="display-6 mb-0">Fleet Forge</h1>
-            <p class="text-muted mb-0">Curate FutureV vehicles and their immersive galleries.</p>
+            <p class="fv-hero__kicker mb-2">Admin Deck</p>
+            <h1 class="fv-title-lg mb-0">Fleet Forge</h1>
         </div>
         <div class="d-flex gap-2">
-            <a class="btn btn-primary" asp-controller="Cars" asp-action="Create">Add Futuristic Car</a>
-            <form method="post" asp-controller="Admin" asp-action="Logout">
+            <a class="fv-btn" asp-controller="Cars" asp-action="Create">Add Concept</a>
+            <form method="post" asp-controller="Admin" asp-action="Logout" class="d-inline">
                 @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-outline-secondary">Sign out</button>
+                <button type="submit" class="fv-btn-outline">Sign out</button>
             </form>
         </div>
     </div>
+</div>
 
-    @if (TempData["StatusMessage"] is string statusMessage)
-    {
-        <div class="alert alert-success">@statusMessage</div>
-    }
+<section class="fv-section">
+    <div class="container">
+        @if (TempData["StatusMessage"] is string statusMessage)
+        {
+            <div class="alert alert-success mb-4" style="background: rgba(213, 25, 32, 0.1); border: 1px solid var(--fv-accent); color: #fff;">
+                @statusMessage
+            </div>
+        }
 
-    @if (Model.Count == 0)
-    {
-        <div class="alert alert-info shadow-sm">No vehicles yet. Deploy your first concept to populate the catalog.</div>
-    }
-    else
-    {
-        <div class="table-responsive shadow-sm rounded">
-            <table class="table align-middle mb-0">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Tagline</th>
-                        <th>Base Price</th>
-                        <th>Autonomy</th>
-                        <th>Images</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach (var car in Model)
-                {
-                    <tr>
-                        <td>@car.Name</td>
-                        <td>@car.Tagline</td>
-                        <td>@car.BasePrice.ToString("C0")</td>
-                        <td>@car.AutonomyLevel</td>
-                        <td>@car.Images.Count</td>
-                        <td class="text-end">
-                            <a class="btn btn-sm btn-outline-secondary" asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id">Edit</a>
-                            <a class="btn btn-sm btn-outline-info" asp-controller="Catalog" asp-action="Details" asp-route-id="@car.Id">Preview</a>
-                            <a class="btn btn-sm btn-outline-danger" asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id">Delete</a>
-                        </td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        </div>
-    }
+        @if (Model.Count == 0)
+        {
+            <div class="fv-pane text-center">
+                <div class="fv-pane__title">No vehicles deployed</div>
+                <p class="fv-pane__info">Initialize the first concept to populate the catalog.</p>
+            </div>
+        }
+        else
+        {
+            <div class="fv-pane p-0 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" style="--bs-table-bg: transparent; --bs-table-color: var(--fv-text); --bs-table-border-color: var(--fv-line);">
+                        <thead style="background: rgba(255,255,255,0.03);">
+                            <tr>
+                                <th class="p-4 text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 0.1em; font-weight: 500;">Name</th>
+                                <th class="p-4 text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 0.1em; font-weight: 500;">Tagline</th>
+                                <th class="p-4 text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 0.1em; font-weight: 500;">Base Price</th>
+                                <th class="p-4 text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 0.1em; font-weight: 500;">Autonomy</th>
+                                <th class="p-4 text-uppercase text-muted" style="font-size: 0.75rem; letter-spacing: 0.1em; font-weight: 500;">Images</th>
+                                <th class="p-4"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var car in Model)
+                        {
+                            <tr>
+                                <td class="p-4 align-middle fw-bold">@car.Name</td>
+                                <td class="p-4 align-middle text-muted">@car.Tagline</td>
+                                <td class="p-4 align-middle">@car.BasePrice.ToString("C0")</td>
+                                <td class="p-4 align-middle"><span class="fv-chip">@car.AutonomyLevel</span></td>
+                                <td class="p-4 align-middle">@car.Images.Count</td>
+                                <td class="p-4 align-middle text-end">
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        <a class="fv-btn-outline py-2 px-3" style="font-size: 0.65rem;" asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id">Edit</a>
+                                        <a class="fv-btn-outline py-2 px-3" style="font-size: 0.65rem;" asp-controller="Catalog" asp-action="Details" asp-route-id="@car.Id">View</a>
+                                        <a class="fv-btn-outline py-2 px-3 text-danger border-danger" style="font-size: 0.65rem;" asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
 </section>
