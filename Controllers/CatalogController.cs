@@ -16,10 +16,11 @@ public class CatalogController : Controller
     [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
     public async Task<IActionResult> Index()
     {
-        var model = await _context.Cars
+        var cars = await _context.Cars
             .AsNoTracking()
             .OrderBy(car => car.Name)
-            .Select(car => new CatalogItem(
+            .Select(car => new
+            {
                 car.Id,
                 car.Name,
                 car.Tagline,
@@ -30,10 +31,38 @@ public class CatalogController : Controller
                 car.RangePerCharge,
                 car.TopSpeed,
                 car.ZeroToSixty,
-                car.Images.OrderBy(image => image.Id).Select(image => image.ImageUrl).FirstOrDefault()))
+                HeroImage = car.Images.OrderBy(image => image.Id)
+                    .Select(i => new { i.ImageUrl, i.ImageData, i.ContentType })
+                    .FirstOrDefault()
+            })
             .ToListAsync();
 
+        var model = cars.Select(car => new CatalogItem(
+            car.Id,
+            car.Name,
+            car.Tagline,
+            car.BasePrice,
+            car.AutonomyLevel,
+            car.DriveType,
+            car.EnergySystem,
+            car.RangePerCharge,
+            car.TopSpeed,
+            car.ZeroToSixty,
+            GetImageSource(car.HeroImage?.ImageUrl, car.HeroImage?.ImageData, car.HeroImage?.ContentType)
+        )).ToList();
+
         return View(model);
+    }
+
+    private static string? GetImageSource(string? imageUrl, byte[]? imageData, string? contentType)
+    {
+        if (imageData is { Length: > 0 })
+        {
+            var type = string.IsNullOrWhiteSpace(contentType) ? "image/png" : contentType;
+            return $"data:{type};base64,{Convert.ToBase64String(imageData)}";
+        }
+
+        return string.IsNullOrWhiteSpace(imageUrl) ? null : imageUrl;
     }
 
     [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new[] { "id" })]
