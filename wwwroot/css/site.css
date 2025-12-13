@@ -225,10 +225,12 @@ a:hover {
   position: absolute;
   inset: 0;
   background: var(
-      --fv-hero-image,
-      url("https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=2100&q=80")
-    )
-    center/cover no-repeat;
+    --fv-hero-image,
+    url("https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=2100&q=80")
+  );
+  background-position: var(--fv-hero-image-position, center);
+  background-size: cover;
+  background-repeat: no-repeat;
   opacity: 0.35;
   transform: scale(1.1);
   z-index: -1;
@@ -485,6 +487,12 @@ a:hover {
   font-size: 1.35rem;
   font-weight: 600;
   letter-spacing: 0.05em;
+}
+
+.fv-card__desc {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .fv-card__meta {
