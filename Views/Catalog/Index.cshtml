@@ -3,7 +3,7 @@
     ViewData["Title"] = "Catalog";
 }
 
-<section class="fv-hero" style="padding-block: 5.5rem;">
+<section class="fv-hero" style="padding-block: 5.5rem; --fv-hero-image: url('/Images/cat-hero.png'); --fv-hero-image-position: center 20%;">
     <div class="container">
         <div class="fv-hero__content">
             <p class="fv-hero__kicker">FutureV catalog</p>
@@ -43,7 +43,7 @@
                         <div class="fv-card__body">
                             <span class="fv-chip">@car.Autonomy</span>
                             <h2 class="fv-card__title">@car.Name</h2>
-                            <p class="text-muted">@car.Tagline</p>
+                            <p class="fv-card__desc">@car.Tagline</p>
                             <div class="fv-card__meta">
                                 <span>@car.DriveType</span>
                                 <span>@car.EnergySystem</span>
