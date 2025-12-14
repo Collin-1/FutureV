@@ -974,3 +974,18 @@ a:hover {
   border: 1px solid var(--fv-line);
   color: var(--fv-muted);
 }
+
+/* Fix for Bootstrap floating labels in dark theme */
+.form-floating > label {
+    color: var(--fv-muted);
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--fv-text);
+}
+
+.form-floating > label::after {
+    background-color: var(--fv-bg) !important;
+}
+

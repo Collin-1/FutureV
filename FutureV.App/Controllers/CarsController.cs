@@ -1,42 +1,24 @@
-using FutureV.Data;
 using FutureV.Core.Entities;
-using FutureV.Services;
+using FutureV.Core.Interfaces;
 using FutureV.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FutureV.Controllers;
 
+[Authorize]
 public class CarsController : Controller
 {
-    private readonly ApplicationDbContext _context;
-    private readonly AdminAccessService _adminAccessService;
+    private readonly ICarRepository _repository;
 
-    public CarsController(ApplicationDbContext context, AdminAccessService adminAccessService)
+    public CarsController(ICarRepository repository)
     {
-        _context = context;
-        _adminAccessService = adminAccessService;
-    }
-
-    public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
-    {
-        if (!_adminAccessService.HasAccess(context.HttpContext))
-        {
-            var returnUrl = context.HttpContext.Request.Path + context.HttpContext.Request.QueryString;
-            context.Result = RedirectToAction("Login", "Admin", new { returnUrl });
-            return;
-        }
-        base.OnActionExecuting(context);
+        _repository = repository;
     }
 
     public async Task<IActionResult> Index()
     {
-        var cars = await _context.Cars
-            .AsNoTracking()
-            .Include(car => car.Images)
-            .OrderBy(car => car.Name)
-            .ToListAsync();
-
+        var cars = await _repository.GetAllAsync();
         return View(cars);
     }
 
@@ -63,8 +45,6 @@ public class CarsController : Controller
         {
             return View(car);
         }
-
-        using var transaction = await _context.Database.BeginTransactionAsync();
 
         var entity = new Car
         {
@@ -120,14 +100,10 @@ public class CarsController : Controller
         if (entity.Images.Count == 0)
         {
             ModelState.AddModelError("Images", "Add at least one image for the vehicle gallery.");
-            await transaction.RollbackAsync();
             return View(car);
         }
 
-        _context.Cars.Add(entity);
-        await _context.SaveChangesAsync();
-        await transaction.CommitAsync();
-
+        await _repository.AddAsync(entity);
         TempData["StatusMessage"] = $"Added {entity.Name} to the FutureV catalog.";
         return RedirectToAction(nameof(Index));
     }
@@ -135,9 +111,7 @@ public class CarsController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var entity = await _context.Cars
-            .Include(car => car.Images)
-            .FirstOrDefaultAsync(car => car.Id == id);
+        var entity = await _repository.GetByIdAsync(id);
 
         if (entity is null)
         {
@@ -193,9 +167,7 @@ public class CarsController : Controller
             return View(car);
         }
 
-        var entity = await _context.Cars
-            .Include(c => c.Images)
-            .FirstOrDefaultAsync(c => c.Id == id);
+        var entity = await _repository.GetByIdAsync(id);
 
         if (entity is null)
         {
@@ -273,7 +245,7 @@ public class CarsController : Controller
             entity.Images.Add(image);
         }
 
-        await _context.SaveChangesAsync();
+        await _repository.UpdateAsync(entity);
         TempData["StatusMessage"] = $"Updated {entity.Name}.";
         return RedirectToAction(nameof(Index));
     }
@@ -281,9 +253,7 @@ public class CarsController : Controller
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
-        var car = await _context.Cars
-            .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Id == id);
+        var car = await _repository.GetByIdAsync(id);
 
         if (car is null)
         {
@@ -297,15 +267,14 @@ public class CarsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var car = await _context.Cars.FindAsync(id);
+        var car = await _repository.GetByIdAsync(id);
 
         if (car is null)
         {
             return NotFound();
         }
 
-        _context.Cars.Remove(car);
-        await _context.SaveChangesAsync();
+        await _repository.DeleteAsync(id);
 
         TempData["StatusMessage"] = $"Removed {car.Name} from the catalog.";
         return RedirectToAction(nameof(Index));
