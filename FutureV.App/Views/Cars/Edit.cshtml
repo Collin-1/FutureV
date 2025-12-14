@@ -12,7 +12,7 @@
         </div>
         <div class="d-flex gap-2">
             <a class="fv-btn-outline" asp-controller="Cars" asp-action="Index">Back to Fleet</a>
-            <form method="post" asp-controller="Admin" asp-action="Logout" class="d-inline">
+            <form method="post" asp-controller="Account" asp-action="Logout" class="d-inline">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="fv-btn-outline">Sign out</button>
             </form>

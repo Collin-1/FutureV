@@ -1,7 +1,12 @@
 using FutureV.Data;
-using FutureV.Services;
+using FutureV.Data.Repositories;
+using FutureV.Core.Interfaces;
+using FutureV.App.Validators;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Npgsql;
 using System.Globalization;
 
@@ -14,7 +19,19 @@ var connectionString = ResolveConnectionString(builder.Configuration);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddScoped<AdminAccessService>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+});
+
+builder.Services.AddScoped<ICarRepository, CarRepository>();
+builder.Services.AddValidatorsFromAssemblyContaining<CarInputModelValidator>();
+builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddResponseCaching();
 builder.Services.AddControllersWithViews();
@@ -30,7 +47,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await SeedData.InitializeAsync(context);
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    await SeedData.InitializeAsync(context, userManager);
 }
 
 // Configure the HTTP request pipeline.
@@ -46,6 +64,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseResponseCaching();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 

@@ -1,13 +1,26 @@
 using FutureV.Core.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FutureV.Data;
 
 public static class SeedData
 {
-    public static async Task InitializeAsync(ApplicationDbContext context)
+    public static async Task InitializeAsync(ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
         await context.Database.MigrateAsync();
+
+        if (!await context.Users.AnyAsync())
+        {
+            var adminUser = new IdentityUser
+            {
+                UserName = "admin@futurev.com",
+                Email = "admin@futurev.com",
+                EmailConfirmed = true
+            };
+
+            await userManager.CreateAsync(adminUser, "FutureV@2025!");
+        }
 
         if (await context.Cars.AnyAsync())
         {
