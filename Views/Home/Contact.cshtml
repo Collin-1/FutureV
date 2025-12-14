@@ -3,21 +3,26 @@
     ViewData["Title"] = "Contact FutureV";
 }
 
-<section class="bg-dark text-light py-5">
-    <div class="container">
-        <h1 class="display-5">Partner With FutureV</h1>
-        <p class="lead">Ready to co-create your mobility future? Signal below and we will align timelines.</p>
+
+<div class="container pt-5 pb-3">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-3">
+        <div>
+            <p class="fv-hero__kicker mb-2">Admin Deck</p>
+            <h1 class="fv-title-lg mb-0">Contact FutureV</h1>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="fv-btn-outline" asp-controller="Home" asp-action="Index">Back to Home</a>
+        </div>
     </div>
-</section>
+</div>
 
-<section class="container py-5" style="max-width: 720px;">
-    @if (TempData["StatusMessage"] is string statusMessage)
-    {
-        <div class="alert alert-success">@statusMessage</div>
-    }
-
-    <div class="card shadow-sm">
-        <div class="card-body">
+<section class="fv-section pt-0">
+    <div class="container" style="max-width: 720px;">
+        @if (TempData["StatusMessage"] is string statusMessage)
+        {
+            <div class="alert alert-success">@statusMessage</div>
+        }
+        <div class="fv-pane">
             <form method="post" asp-controller="Home" asp-action="Contact">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
                 <div class="row g-3">
@@ -47,8 +52,9 @@
                         <span asp-validation-for="Message" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="mt-4 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary">Send Transmission</button>
+                <div class="mt-4 d-flex justify-content-end gap-3">
+                    <a class="fv-btn-outline" asp-controller="Home" asp-action="Index">Cancel</a>
+                    <button type="submit" class="fv-btn">Send Transmission</button>
                 </div>
             </form>
         </div>
