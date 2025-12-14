@@ -1,0 +1,38 @@
+@model FutureV.ViewModels.CarInputModel
+@{
+    ViewData["Title"] = "Edit Futuristic Car";
+    var id = ViewBag.Id;
+}
+
+<div class="container pt-5 pb-3">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-3">
+        <div>
+            <p class="fv-hero__kicker mb-2">Admin Deck</p>
+            <h1 class="fv-title-lg mb-0">Edit Car</h1>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="fv-btn-outline" asp-controller="Cars" asp-action="Index">Back to Fleet</a>
+            <form method="post" asp-controller="Admin" asp-action="Logout" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="fv-btn-outline">Sign out</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<section class="fv-section pt-0">
+    <div class="container">
+        <form method="post" asp-controller="Cars" asp-action="Edit" asp-route-id="@id" enctype="multipart/form-data">
+            <partial name="_CarForm" model="Model" />
+            <div class="mt-4 d-flex justify-content-end gap-3">
+                <a class="fv-btn-outline" asp-controller="Cars" asp-action="Index">Cancel</a>
+                <button type="submit" class="fv-btn">Update Vehicle</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_CarFormScripts" />
+}

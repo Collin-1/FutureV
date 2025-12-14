@@ -1,0 +1,63 @@
+@model List<FutureV.Controllers.CatalogController.CatalogItem>
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+<section class="fv-hero" style="padding-block: 5.5rem; --fv-hero-image: url('/Images/cat-hero.png'); --fv-hero-image-position: center 20%;">
+    <div class="container">
+        <div class="fv-hero__content">
+            <p class="fv-hero__kicker">FutureV catalog</p>
+            <h1 class="fv-hero__title">Curated fleet</h1>
+            <p class="fv-hero__desc">Dive into the full collection of FutureV prototypes. Every profile balances raw telemetry with crafted storytelling to help investors and enthusiasts experience tomorrow's mobility, today.</p>
+        </div>
+    </div>
+</section>
+
+<section class="fv-section">
+    <div class="container">
+        @if (Model.Count == 0)
+        {
+            <div class="fv-pane text-center">
+                <div class="fv-pane__title">Fleet awaiting launch</div>
+                <p class="fv-pane__info">Visit the <a asp-controller="Admin" asp-action="Login">admin deck</a> to add the first concept to this gallery.</p>
+            </div>
+        }
+        else
+        {
+            <div class="fv-grid fv-grid--cards">
+                @foreach (var car in Model)
+                {
+                    <article class="fv-card">
+                        <div class="fv-card__visual">
+                            @if (!string.IsNullOrEmpty(car.HeroImageSrc))
+                            {
+                                <img src="@car.HeroImageSrc" alt="@car.Name concept render" />
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-center h-100">
+                                    <span class="fv-chip">Image incoming</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="fv-card__body">
+                            <span class="fv-chip">@car.Autonomy</span>
+                            <h2 class="fv-card__title">@car.Name</h2>
+                            <p class="fv-card__desc">@car.Tagline</p>
+                            <div class="fv-card__meta">
+                                <span>@car.DriveType</span>
+                                <span>@car.EnergySystem</span>
+                                <span>@car.Range km range</span>
+                                <span>@car.ZeroToSixty s 0-60</span>
+                            </div>
+                            <div class="fv-card__footer">
+                                <span class="fv-price">@car.BasePrice.ToString("C0")</span>
+                                <a class="fv-pill-link" asp-controller="Catalog" asp-action="Details" asp-route-id="@car.Id">Experience</a>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>
