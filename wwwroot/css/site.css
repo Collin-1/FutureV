@@ -1,3 +1,9 @@
+/* High-contrast table header for admin deck */
+.fv-table-header {
+  color: var(--fv-text) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  letter-spacing: 0.13em;
+}
 :root {
   color-scheme: dark;
   --fv-bg: #050608;
@@ -933,7 +939,8 @@ a:hover {
 }
 
 /* Form Styles */
-.form-control, .form-select {
+.form-control,
+.form-select {
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--fv-line);
   color: var(--fv-text);
@@ -941,7 +948,8 @@ a:hover {
   padding: 0.75rem 1rem;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   background-color: rgba(255, 255, 255, 0.08);
   border-color: var(--fv-accent);
   color: var(--fv-text);
@@ -966,4 +974,3 @@ a:hover {
   border: 1px solid var(--fv-line);
   color: var(--fv-muted);
 }
-
