@@ -2,22 +2,21 @@ using FutureV.Data;
 using FutureV.Data.Repositories;
 using FutureV.Core.Interfaces;
 using FutureV.App.Validators;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Npgsql;
 using System.Globalization;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-var connectionString = ResolveConnectionString(builder.Configuration);
+var connectionString = ResolveConnectionString(builder.Environment, builder.Configuration);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseSqlite(connectionString));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -39,8 +38,6 @@ builder.Services.AddControllersWithViews();
 var culture = new CultureInfo("en-ZA");
 CultureInfo.DefaultThreadCurrentCulture = culture;
 CultureInfo.DefaultThreadCurrentUICulture = culture;
-
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
 
@@ -88,44 +85,40 @@ app.MapControllerRoute(
 
 await app.RunAsync();
 
-static string ResolveConnectionString(ConfigurationManager configuration)
+static string ResolveConnectionString(IHostEnvironment environment, ConfigurationManager configuration)
 {
-    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-    if (!string.IsNullOrWhiteSpace(databaseUrl))
+    var configured = configuration.GetConnectionString("DefaultConnection");
+    if (!string.IsNullOrWhiteSpace(configured))
     {
-        var uri = new Uri(databaseUrl);
-        var userInfo = uri.UserInfo.Split(':');
-        var builder = new NpgsqlConnectionStringBuilder
-        {
-            Host = uri.Host,
-            Port = uri.IsDefaultPort ? 5432 : uri.Port,
-            Username = userInfo[0],
-            Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty,
-            Database = uri.AbsolutePath.Trim('/'),
-            SslMode = SslMode.Require
-        };
-
-        if (!string.IsNullOrEmpty(uri.Query))
-        {
-            var parameters = QueryHelpers.ParseQuery(uri.Query);
-            foreach (var parameter in parameters)
-            {
-                var value = parameter.Value.LastOrDefault();
-                if (!string.IsNullOrEmpty(value))
-                {
-                    builder[parameter.Key] = value;
-                }
-            }
-        }
-
-        return builder.ConnectionString;
+        return configured;
     }
 
-    var connection = configuration.GetConnectionString("DefaultConnection");
-    if (!string.IsNullOrWhiteSpace(connection))
+    var sqlitePath = Environment.GetEnvironmentVariable("SQLITE_DB_PATH");
+    if (!string.IsNullOrWhiteSpace(sqlitePath))
     {
-        return connection;
+        return BuildSqliteConnectionString(sqlitePath);
     }
 
-    throw new InvalidOperationException("A PostgreSQL connection string was not provided. Set ConnectionStrings__DefaultConnection or DATABASE_URL.");
+    var renderDataDirectory = Environment.GetEnvironmentVariable("RENDER_DATA_DIR");
+    if (!string.IsNullOrWhiteSpace(renderDataDirectory))
+    {
+        var persistentPath = Path.Combine(renderDataDirectory, "futurev.db");
+        return BuildSqliteConnectionString(persistentPath);
+    }
+
+    var appDataDirectory = Path.Combine(environment.ContentRootPath, "App_Data");
+    Directory.CreateDirectory(appDataDirectory);
+    var localPath = Path.Combine(appDataDirectory, "futurev.db");
+    return BuildSqliteConnectionString(localPath);
+}
+
+static string BuildSqliteConnectionString(string path)
+{
+    var directory = Path.GetDirectoryName(path);
+    if (!string.IsNullOrWhiteSpace(directory))
+    {
+        Directory.CreateDirectory(directory);
+    }
+
+    return $"Data Source={path}";
 }
