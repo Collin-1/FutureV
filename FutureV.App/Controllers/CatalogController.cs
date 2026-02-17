@@ -1,4 +1,5 @@
 using FutureV.Core.Interfaces;
+using FutureV.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FutureV.Controllers;
@@ -20,7 +21,7 @@ public class CatalogController : Controller
         var model = cars.Select(car =>
         {
             var heroImage = car.Images.OrderBy(i => i.Id).FirstOrDefault();
-            return new CatalogItem(
+            return new CatalogItemViewModel(
                 car.Id,
                 car.Name,
                 car.Tagline,
@@ -51,17 +52,4 @@ public class CatalogController : Controller
         return View(car);
     }
 
-    public record CatalogItem(
-        int Id,
-        string Name,
-        string Tagline,
-        decimal BasePrice,
-        string Autonomy,
-        string DriveType,
-        string EnergySystem,
-        int Range,
-        int TopSpeed,
-        double ZeroToSixty,
-        string? HeroImageSrc
-    );
 }

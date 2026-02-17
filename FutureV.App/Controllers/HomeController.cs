@@ -55,15 +55,4 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public record CarSummary(
-        int Id,
-        string Name,
-        string Tagline,
-        decimal BasePrice,
-        string Autonomy,
-        int Range,
-        int TopSpeed,
-        double ZeroToSixty,
-        string? HeroImageSrc
-    );
 }
