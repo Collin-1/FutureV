@@ -44,11 +44,15 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+// Only run migrations and seeding in Development to minimize cold start time in production
+if (app.Environment.IsDevelopment())
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-    await SeedData.InitializeAsync(context, userManager);
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        await SeedData.InitializeAsync(context, userManager);
+    }
 }
 
 // Configure the HTTP request pipeline.
