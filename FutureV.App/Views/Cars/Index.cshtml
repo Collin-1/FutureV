@@ -3,27 +3,24 @@
     ViewData["Title"] = "Manage Cars";
 }
 
-<div class="container pt-5 pb-3">
-    <div class="d-flex justify-content-between align-items-end flex-wrap gap-3">
-        <div>
-            <p class="fv-hero__kicker mb-2">Admin Deck</p>
-            <h1 class="fv-title-lg mb-0">Fleet Forge</h1>
-        </div>
-        <div class="d-flex gap-2">
-            <a class="fv-btn" asp-controller="Cars" asp-action="Create">Add Concept</a>
-            <form method="post" asp-controller="Account" asp-action="Logout" class="d-inline">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="fv-btn-outline">Sign out</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<section class="fv-section">
+<section class="fv-section pt-5">
     <div class="container">
+        <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-4">
+            <div>
+                <div class="fv-section__title">Admin deck</div>
+                <h1 class="fv-title-lg mb-0">Fleet forge.</h1>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <a class="fv-btn" asp-controller="Cars" asp-action="Create">Add concept</a>
+                <form method="post" asp-controller="Account" asp-action="Logout" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="fv-btn-outline">Sign out</button>
+                </form>
+            </div>
+        </div>
         @if (TempData["StatusMessage"] is string statusMessage)
         {
-            <div class="alert alert-success mb-4" style="background: rgba(213, 25, 32, 0.1); border: 1px solid var(--fv-accent); color: #fff;">
+            <div class="alert alert-success mb-4">
                 @statusMessage
             </div>
         }
