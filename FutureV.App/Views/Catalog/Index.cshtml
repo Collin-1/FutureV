@@ -7,8 +7,8 @@
     <div class="container">
         <div class="fv-hero__content">
             <p class="fv-hero__kicker">FutureV catalog</p>
-            <h1 class="fv-hero__title">Curated fleet</h1>
-            <p class="fv-hero__desc">Dive into the full collection of FutureV prototypes. Every profile balances raw telemetry with crafted storytelling to help investors and enthusiasts experience tomorrow's mobility, today.</p>
+            <h1 class="fv-hero__title">Find the model that fits the way you drive.</h1>
+            <p class="fv-hero__desc">A cleaner, more editorial catalog built around feel, finish, and the kind of performance details buyers actually care about.</p>
         </div>
     </div>
 </section>
@@ -18,12 +18,23 @@
         @if (Model.Count == 0)
         {
             <div class="fv-pane text-center">
-                <div class="fv-pane__title">Fleet awaiting launch</div>
-                <p class="fv-pane__info">Visit the <a asp-controller="Account" asp-action="Login">admin deck</a> to add the first concept to this gallery.</p>
+                <div class="fv-pane__title">No vehicles yet</div>
+                <p class="fv-pane__info">Add the first concept from the <a asp-controller="Account" asp-action="Login">admin area</a> and this gallery will populate automatically.</p>
             </div>
         }
         else
         {
+            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+                <div>
+                    <div class="fv-section__title">Trending now</div>
+                    <h2 class="fv-title-lg mb-0">Editorial cards, bigger images, faster scanning.</h2>
+                </div>
+                <div class="fv-detail-meta">
+                    <span>@Model.Count models</span>
+                    <span>Electric only</span>
+                    <span>Curated by FutureV</span>
+                </div>
+            </div>
             <div class="fv-grid fv-grid--cards">
                 @foreach (var car in Model)
                 {
@@ -48,11 +59,11 @@
                                 <span>@car.DriveType</span>
                                 <span>@car.EnergySystem</span>
                                 <span>@car.Range km range</span>
-                                <span>@car.ZeroToSixty s 0-60</span>
+                                <span>@car.ZeroToSixty s sprint</span>
                             </div>
                             <div class="fv-card__footer">
                                 <span class="fv-price">@car.BasePrice.ToString("C0")</span>
-                                <a class="fv-pill-link" asp-controller="Catalog" asp-action="Details" asp-route-id="@car.Id">Experience</a>
+                                <a class="fv-pill-link" asp-controller="Catalog" asp-action="Details" asp-route-id="@car.Id">Open detail</a>
                             </div>
                         </div>
                     </article>
