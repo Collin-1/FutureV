@@ -1,56 +1,61 @@
 @{
-    ViewData["Title"] = "Discover More";
+    ViewData["Title"] = "Design Notes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <section class="container py-5">
     <div class="row mb-5">
         <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4 fw-bold mb-3">Discover the Future of Mobility</h1>
-            <p class="lead text-muted">Explore the groundbreaking technologies that power FutureV's next-generation vehicles. Designed for tomorrow, engineered for today.</p>
+            <div class="fv-section__title">Design language</div>
+            <h1 class="fv-title-xl mb-3">The details are what make the fleet feel premium.</h1>
+            <p class="fv-page__lead mx-auto">FutureV is built around simple, legible ideas: lower visual noise, richer materials, smarter interfaces, and a cabin that reads like a lounge.</p>
         </div>
     </div>
     <div class="row g-4">
         <div class="col-md-6">
-            <div class="fv-image-card fv-image-card--large mb-4">
+            <div class="fv-image-card fv-image-card--large">
                 <img src="/Images/level-5-autonomous-ai.png" alt="Autonomous AI" />
                 <div class="fv-image-overlay">
-                    <h3>Level 5 Autonomous AI</h3>
-                    <p>Our cars feature fully autonomous driving powered by deep learning neural networks, real-time sensor fusion, and V2X communication. The AI adapts to any environment, ensuring safety and comfort for all passengers.</p>
+                    <div class="fv-section__title mb-2">Autonomy</div>
+                    <h3 class="h2 mb-2">Level 5 assistance that feels invisible.</h3>
+                    <p>Guidance, route prediction, and parking support are all designed to stay in the background unless the driver asks for help.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="fv-image-card fv-image-card--large mb-4">
+            <div class="fv-image-card fv-image-card--large">
                 <img src="/Images/solid-state-graphene-batteries.png" alt="Solid-State Battery" />
                 <div class="fv-image-overlay">
-                    <h3>Solid-State Graphene Batteries</h3>
-                    <p>Experience ultra-fast charging and a 1,200km range with our proprietary graphene-based solid-state batteries. These cells are lighter, safer, and last 3x longer than conventional lithium-ion packs. Powered by zero-emission propulsion systems.</p>
+                    <div class="fv-section__title mb-2">Battery</div>
+                    <h3 class="h2 mb-2">Fast charging, long range, less waiting.</h3>
+                    <p>Solid-state power systems give FutureV its calm, high-end driving feel without the compromises of older battery architectures.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="fv-image-card fv-image-card--large mb-4">
+            <div class="fv-image-card fv-image-card--large">
                 <img src="/Images/augmented-reality-hud.png" alt="Augmented Reality HUD" />
                 <div class="fv-image-overlay">
-                    <h3>Augmented Reality HUD</h3>
-                    <p>Our panoramic AR head-up display projects navigation, safety alerts, and contextual information directly onto the windshield, blending digital and real worlds for an intuitive driving experience.</p>
+                    <div class="fv-section__title mb-2">Interface</div>
+                    <h3 class="h2 mb-2">A HUD that removes clutter instead of adding it.</h3>
+                    <p>Navigation, speed, and safety information appear only where needed so the cockpit stays calm and easy to read.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="fv-image-card fv-image-card--large mb-4">
+            <div class="fv-image-card fv-image-card--large">
                 <img src="/Images/sustainable-smart-materials.png" alt="Sustainable Materials" />
                 <div class="fv-image-overlay">
-                    <h3>Sustainable Smart Materials</h3>
-                    <p>Every FutureV interior is crafted from recycled ocean plastics, vegan leather, and adaptive smart glass. Our materials are not only eco-friendly but also self-healing and climate adaptive.</p>
+                    <div class="fv-section__title mb-2">Materials</div>
+                    <h3 class="h2 mb-2">Soft-touch surfaces, sustainable by design.</h3>
+                    <p>Recycled textiles, vegan upholstery, and smart glass create a cabin that feels premium without leaning on excess.</p>
                 </div>
             </div>
         </div>
     </div>
     <div class="row mt-5">
         <div class="col-lg-8 mx-auto text-center">
-            <a href="/Catalog" class="btn btn-lg btn-primary px-5 py-3 mt-3 me-3">Browse Our Vehicles</a>
+            <a asp-controller="Catalog" asp-action="Index" class="fv-btn px-5 py-3 mt-3">Browse the fleet</a>
         </div>
     </div>
 </section>
