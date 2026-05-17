@@ -2,30 +2,28 @@
     ViewData["Title"] = "Log in";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <section>
-                <form id="account" method="post">
-                    <h2 class="text-center mb-4">Admin Access</h2>
-                    <hr />
-                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                    <div class="form-floating mb-3">
-                        <input name="email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                        <label for="email">Email</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input name="password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                        <label for="password">Password</label>
-                    </div>
-                    <div>
-                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-danger">Log in</button>
-                    </div>
-                </form>
-            </section>
+<section class="fv-section py-5">
+    <div class="container" style="max-width: 560px;">
+        <div class="text-center mb-4">
+            <div class="fv-section__title">Admin access</div>
+            <h1 class="fv-title-lg mb-0">Sign in to the fleet studio.</h1>
+        </div>
+        <div class="fv-pane">
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input name="email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <label for="email">Email</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input name="password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                    <label for="password">Password</label>
+                </div>
+                <button id="login-submit" type="submit" class="w-100 fv-btn py-3">Log in</button>
+            </form>
         </div>
     </div>
-</div>
+</section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
