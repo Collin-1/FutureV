@@ -7,7 +7,6 @@
     <script type="importmap"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Oswald:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FutureV.styles.css" asp-append-version="true" />
@@ -24,14 +23,13 @@
                 <div class="collapse navbar-collapse fv-navbar__menu" id="futurevNav">
                     <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
                         <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Discover" asp-action="Index">Discover</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Catalog" asp-action="Index">Catalog</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Arriving" asp-action="Index">Arriving</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Catalog" asp-action="Index">Fleet</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Discover" asp-action="Index">Design</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Arriving" asp-action="Index">Coming Soon</a></li>
                         <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
                     </ul>
                     <div class="fv-navbar__cta mt-4 mt-lg-0">
-                        <a class="btn fv-btn-outline" asp-controller="Cars" asp-action="Index">Admin Deck</a>
+                        <a class="btn fv-btn-outline" asp-controller="Cars" asp-action="Index">Admin</a>
                     </div>
                 </div>
             </div>
@@ -45,7 +43,7 @@
     <footer class="fv-footer mt-5">
         <div class="container fv-footer__inner">
             <span>&copy; @DateTime.UtcNow.Year FutureV Labs</span>
-            <span class="fv-footer__tagline">Imagining mobility beyond the horizon.</span>
+            <span class="fv-footer__tagline">Luxury mobility, redesigned for the next decade.</span>
         </div>
     </footer>
 
