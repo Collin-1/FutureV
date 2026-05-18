@@ -15,124 +15,110 @@
     return;
 }
 
-<section class="fv-section">
+<section class="fv-section pt-5">
     <div class="container">
         <div class="fv-page-header">
             <div>
-                <p class="fv-section__title">Concept dossier</p>
+                <p class="fv-section__title">Vehicle detail</p>
                 <h1 class="fv-title-xl">@Model.Name</h1>
                 @if (!string.IsNullOrWhiteSpace(Model.Tagline))
                 {
                     <p class="fv-page__lead">@Model.Tagline</p>
                 }
             </div>
-            @{
-                var detailMeta = new[]
+            <div class="fv-detail-meta">
+                <span>@Model.AutonomyLevel</span>
+                <span>@Model.DriveType</span>
+                <span>@Model.EnergySystem</span>
+            </div>
+        </div>
+
+        <div class="fv-detail-hero">
+            <div class="fv-detail-hero__media">
+                @if (Model.Images.Count > 0)
                 {
-                    Model.AutonomyLevel,
-                    Model.DriveType,
-                    Model.EnergySystem,
-                    Model.PowerOutput
-                }
-                .Where(value => !string.IsNullOrWhiteSpace(value))
-                .ToList();
-            }
-            @if (detailMeta.Count > 0)
-            {
-                <div class="fv-detail-meta">
-                    @foreach (var value in detailMeta)
+                    var heroImage = Model.Images.OrderBy(image => image.Id).FirstOrDefault();
+                    var heroSource = heroImage?.GetImageSource();
+                    if (!string.IsNullOrWhiteSpace(heroSource))
                     {
-                        <span>@value</span>
+                        <img src="@heroSource" alt="@Model.Name main preview" />
+                    }
+                }
+
+                <div class="fv-detail-hero__overlay">
+                    <span class="fv-detail-hero__kicker">Featured vehicle</span>
+                    <div class="fv-detail-hero__title">@Model.Name</div>
+                    @if (!string.IsNullOrWhiteSpace(Model.Tagline))
+                    {
+                        <p class="fv-detail-hero__copy mb-0">@Model.Tagline</p>
                     }
                 </div>
-            }
-        </div>
-        <div class="row g-5">
-            <div class="col-lg-8">
-                @if (Model.Images.Count == 0)
-                {
-                    <div class="fv-pane text-center">
-                        <div class="fv-pane__title">Gallery coming soon</div>
-                        <p class="fv-pane__info">Visuals will unlock once the concept team releases first renders.</p>
-                    </div>
-                }
-                else
-                {
-                    <div class="fv-gallery">
-                        <div id="catalogCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                @for (var i = 0; i < Model.Images.Count; i++)
-                                {
-                                    var image = Model.Images.ElementAt(i);
-                                    var imageSource = image.GetImageSource();
-                                    <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
-                                        @if (!string.IsNullOrWhiteSpace(imageSource))
-                                        {
-                                            <img src="@imageSource" class="d-block w-100" alt="@image.ViewAngle view of @Model.Name" />
-                                        }
-                                        else
-                                        {
-                                            <div class="ratio ratio-16x9 bg-dark-subtle d-flex align-items-center justify-content-center">
-                                                <span class="text-secondary text-uppercase">Image unavailable</span>
-                                            </div>
-                                        }
-                                        <div class="carousel-caption d-none d-md-block">
-                                            <h5>@image.ViewAngle</h5>
-                                            @if (!string.IsNullOrEmpty(image.Description))
-                                            {
-                                                <p>@image.Description</p>
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#catalogCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#catalogCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>
-                    </div>
-                }
             </div>
-            <div class="col-lg-4">
-                <div class="fv-pane mb-4">
-                    <div class="fv-pane__title">Investment</div>
-                    <h2 class="fv-title-lg mb-0">@Model.BasePrice.ToString("C0")</h2>
-                    <div class="fv-metric-grid mt-4">
-                        <div class="fv-metric-card">
-                            <span>Range</span>
-                            <strong>@Model.RangePerCharge km</strong>
-                        </div>
-                        <div class="fv-metric-card">
-                            <span>Top speed</span>
-                            <strong>@Model.TopSpeed km/h</strong>
-                        </div>
-                        <div class="fv-metric-card">
-                            <span>0-60 mph</span>
-                            <strong>@Model.ZeroToSixty s</strong>
-                        </div>
-                        <div class="fv-metric-card">
-                            <span>Fast charge</span>
-                            <strong>@Model.FastChargeMinutes min</strong>
-                        </div>
-                        <div class="fv-metric-card">
-                            <span>Seating</span>
-                            <strong>@Model.SeatingCapacity</strong>
-                        </div>
-                        <div class="fv-metric-card">
-                            <span>Release year</span>
-                            <strong>@Model.ReleaseYear</strong>
-                        </div>
-                    </div>
-                    <a class="fv-btn mt-4" asp-controller="Home" asp-action="Contact" asp-route-car="@Model.Name">Request details</a>
+
+            <aside class="fv-detail-hero__rail fv-pane fv-pane--dark">
+                <div class="fv-detail-shell__assistant">
+                    <div class="fv-detail-shell__assistant-title">AI Assistant</div>
+                    <p class="fv-detail-shell__assistant-copy">Ask for a comparison, request a viewing, or review the most important specs without clutter.</p>
                 </div>
+
+                <div class="fv-detail-hero__price">
+                    <span>Starting price</span>
+                    <strong>@Model.BasePrice.ToString("C0")</strong>
+                </div>
+
+                <div class="fv-detail-shell__actions">
+                    <div class="fv-detail-shell__action">
+                        <strong>Book a viewing</strong>
+                        <span>Pick a time to inspect it</span>
+                    </div>
+                    <div class="fv-detail-shell__action">
+                        <strong>Compare</strong>
+                        <span>Check range and speed</span>
+                    </div>
+                    <div class="fv-detail-shell__action">
+                        <strong>Contact</strong>
+                        <span>Send a private inquiry</span>
+                    </div>
+                </div>
+
+                <div class="fv-detail-shell__list">
+                    <div class="fv-detail-shell__stat">
+                        <span class="fv-detail-shell__stat-label">Range</span>
+                        <span class="fv-detail-shell__stat-value">@Model.RangePerCharge km</span>
+                    </div>
+                    <div class="fv-detail-shell__stat">
+                        <span class="fv-detail-shell__stat-label">Top speed</span>
+                        <span class="fv-detail-shell__stat-value">@Model.TopSpeed km/h</span>
+                    </div>
+                    <div class="fv-detail-shell__stat">
+                        <span class="fv-detail-shell__stat-label">0-60 mph</span>
+                        <span class="fv-detail-shell__stat-value">@Model.ZeroToSixty s</span>
+                    </div>
+                    <div class="fv-detail-shell__stat">
+                        <span class="fv-detail-shell__stat-label">Fast charge</span>
+                        <span class="fv-detail-shell__stat-value">@Model.FastChargeMinutes min</span>
+                    </div>
+                </div>
+
+                <a class="fv-btn w-100" asp-controller="Home" asp-action="Contact" asp-route-car="@Model.Name">Request details</a>
+            </aside>
+        </div>
+
+        <div class="row g-4 mt-4">
+            <div class="col-lg-7">
                 <div class="fv-pane">
                     <div class="fv-pane__title">Storyline</div>
                     <p class="fv-pane__info mb-0">@Model.Narrative</p>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="fv-pane fv-pane--dark h-100">
+                    <div class="fv-pane__title">Key points</div>
+                    <ul class="fv-detail-bullets">
+                        <li>@Model.PowerOutput</li>
+                        <li>@Model.SeatingCapacity seats for daily use.</li>
+                        <li>@Model.ReleaseYear release with a @Model.DriveType setup.</li>
+                    </ul>
                 </div>
             </div>
         </div>
