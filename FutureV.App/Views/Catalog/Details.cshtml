@@ -47,108 +47,101 @@
             </div>
         </div>
 
-        <div class="fv-detail-hero">
-            <div class="fv-detail-hero__media">
-                @if (primaryImage is not null)
-                {
-                    <img src="@primaryImage.Source" alt="@primaryImage.Alt" data-detail-carousel-main />
-                }
+        <div class="fv-detail-page">
+            <div class="fv-detail-page__viewer fv-pane">
+                <div class="fv-detail-page__stage">
+                    <div class="fv-detail-page__frame">
+                        @if (primaryImage is not null)
+                        {
+                            <img src="@primaryImage.Source" alt="@primaryImage.Alt" data-detail-carousel-main />
+                        }
+                    </div>
 
-                <div class="fv-detail-hero__overlay">
-                    <span class="fv-detail-hero__kicker">Featured vehicle</span>
-                    <div class="fv-detail-hero__title">@Model.Name</div>
-                    @if (!string.IsNullOrWhiteSpace(Model.Tagline))
+                    @if (imageChoices.Count > 1)
                     {
-                        <p class="fv-detail-hero__copy mb-0" data-detail-carousel-caption>@Model.Tagline</p>
+                        <div class="fv-detail-page__thumbs" data-detail-carousel>
+                            @foreach (var image in imageChoices)
+                            {
+                                <button type="button"
+                                        class="fv-detail-page__thumb"
+                                        data-detail-carousel-thumb
+                                        data-image-src="@image.Source"
+                                        data-image-alt="@image.Alt"
+                                        data-image-caption="@image.Angle"
+                                        aria-pressed="@(image == primaryImage ? "true" : "false")">
+                                    <img src="@image.Source" alt="@image.Angle" />
+                                    <span>@image.Angle</span>
+                                </button>
+                            }
+                        </div>
                     }
+                </div>
+
+                <div class="fv-detail-page__strip">
+                    <div class="fv-detail-page__chip"><span>Drive</span><strong>@Model.DriveType</strong></div>
+                    <div class="fv-detail-page__chip"><span>Range</span><strong>@Model.RangePerCharge km</strong></div>
+                    <div class="fv-detail-page__chip"><span>Seats</span><strong>@Model.SeatingCapacity</strong></div>
+                    <div class="fv-detail-page__chip"><span>Year</span><strong>@Model.ReleaseYear</strong></div>
+                </div>
+
+                <div class="fv-detail-page__specs fv-pane">
+                    <div class="fv-pane__title">Specifications</div>
+                    <details open>
+                        <summary>Performance</summary>
+                        <div class="fv-detail-page__spec-grid">
+                            <div><span>0-60 mph</span><strong>@Model.ZeroToSixty s</strong></div>
+                            <div><span>Top speed</span><strong>@Model.TopSpeed km/h</strong></div>
+                            <div><span>Fast charge</span><strong>@Model.FastChargeMinutes min</strong></div>
+                            <div><span>Power</span><strong>@Model.PowerOutput</strong></div>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>Technology</summary>
+                        <div class="fv-detail-page__spec-copy">@Model.AutonomyLevel with @Model.EnergySystem for a calmer, longer-range drive.</div>
+                    </details>
+                    <details>
+                        <summary>Overview</summary>
+                        <div class="fv-detail-page__spec-copy">@Model.Narrative</div>
+                    </details>
                 </div>
             </div>
 
-            @if (imageChoices.Count > 1)
-            {
-                <div class="fv-detail-hero__thumbs" data-detail-carousel>
-                    @foreach (var image in imageChoices)
-                    {
-                        <button type="button"
-                                class="fv-detail-hero__thumb"
-                                data-detail-carousel-thumb
-                                data-image-src="@image.Source"
-                                data-image-alt="@image.Alt"
-                                data-image-caption="@image.Angle"
-                                aria-pressed="@(image == primaryImage ? "true" : "false")">
-                            <img src="@image.Source" alt="@image.Angle" />
-                            <span>@image.Angle</span>
-                        </button>
-                    }
-                </div>
-            }
-
-            <aside class="fv-detail-hero__rail fv-pane fv-pane--dark">
-                <div class="fv-detail-shell__assistant">
-                    <div class="fv-detail-shell__assistant-title">AI Assistant</div>
-                    <p class="fv-detail-shell__assistant-copy">Ask for a comparison, request a viewing, or review the most important specs without clutter.</p>
+            <aside class="fv-detail-page__panel fv-pane fv-pane--dark">
+                <div>
+                    <div class="fv-section__title">@Model.Name</div>
+                    <h2 class="fv-title-lg mb-2">@Model.Tagline</h2>
+                    <p class="fv-page__lead mb-0">A cleaner presentation with the image first, the trim rail beside it, and the details kept secondary.</p>
                 </div>
 
-                <div class="fv-detail-hero__price">
-                    <span>Starting price</span>
+                <div class="fv-detail-page__price">
+                    <span>Cash price</span>
                     <strong>@Model.BasePrice.ToString("C0")</strong>
                 </div>
 
-                <div class="fv-detail-shell__actions">
-                    <div class="fv-detail-shell__action">
-                        <strong>Book a viewing</strong>
-                        <span>Pick a time to inspect it</span>
-                    </div>
-                    <div class="fv-detail-shell__action">
-                        <strong>Compare</strong>
-                        <span>Check range and speed</span>
-                    </div>
-                    <div class="fv-detail-shell__action">
-                        <strong>Contact</strong>
-                        <span>Send a private inquiry</span>
-                    </div>
+                <div class="fv-detail-page__actions">
+                    <a class="fv-btn" asp-controller="Home" asp-action="Contact" asp-route-car="@Model.Name">Request details</a>
+                    <a class="fv-btn-outline" asp-controller="Catalog" asp-action="Index">Back to fleet</a>
                 </div>
 
-                <div class="fv-detail-shell__list">
+                <div class="fv-detail-page__list">
+                    <div class="fv-detail-shell__stat">
+                        <span class="fv-detail-shell__stat-label">Autonomy</span>
+                        <span class="fv-detail-shell__stat-value">@Model.AutonomyLevel</span>
+                    </div>
+                    <div class="fv-detail-shell__stat">
+                        <span class="fv-detail-shell__stat-label">Energy</span>
+                        <span class="fv-detail-shell__stat-value">@Model.EnergySystem</span>
+                    </div>
+                    <div class="fv-detail-shell__stat">
+                        <span class="fv-detail-shell__stat-label">Drive</span>
+                        <span class="fv-detail-shell__stat-value">@Model.DriveType</span>
+                    </div>
                     <div class="fv-detail-shell__stat">
                         <span class="fv-detail-shell__stat-label">Range</span>
                         <span class="fv-detail-shell__stat-value">@Model.RangePerCharge km</span>
                     </div>
-                    <div class="fv-detail-shell__stat">
-                        <span class="fv-detail-shell__stat-label">Top speed</span>
-                        <span class="fv-detail-shell__stat-value">@Model.TopSpeed km/h</span>
-                    </div>
-                    <div class="fv-detail-shell__stat">
-                        <span class="fv-detail-shell__stat-label">0-60 mph</span>
-                        <span class="fv-detail-shell__stat-value">@Model.ZeroToSixty s</span>
-                    </div>
-                    <div class="fv-detail-shell__stat">
-                        <span class="fv-detail-shell__stat-label">Fast charge</span>
-                        <span class="fv-detail-shell__stat-value">@Model.FastChargeMinutes min</span>
-                    </div>
                 </div>
-
-                <a class="fv-btn w-100" asp-controller="Home" asp-action="Contact" asp-route-car="@Model.Name">Request details</a>
             </aside>
-        </div>
-
-        <div class="row g-4 mt-4">
-            <div class="col-lg-7">
-                <div class="fv-pane">
-                    <div class="fv-pane__title">Storyline</div>
-                    <p class="fv-pane__info mb-0">@Model.Narrative</p>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <div class="fv-pane fv-pane--dark h-100">
-                    <div class="fv-pane__title">Key points</div>
-                    <ul class="fv-detail-bullets">
-                        <li>@Model.PowerOutput</li>
-                        <li>@Model.SeatingCapacity seats for daily use.</li>
-                        <li>@Model.ReleaseYear release with a @Model.DriveType setup.</li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 </section>
