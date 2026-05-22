@@ -1401,7 +1401,7 @@ a:hover {
 
 .fv-detail-page__frame {
   position: relative;
-  height: min(72vh, 52rem);
+  height: auto;
   background: #fff;
   border: 1px solid var(--fv-line);
   overflow: hidden;
@@ -1410,8 +1410,8 @@ a:hover {
 
 .fv-detail-page__frame img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  max-width: 100%;
   display: block;
 }
 
@@ -1617,7 +1617,7 @@ a:hover {
   }
 
   .fv-detail-page__frame {
-    height: 24rem;
+    height: auto;
   }
 }
 
