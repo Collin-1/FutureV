@@ -15,6 +15,20 @@
     return;
 }
 
+@{
+    var imageChoices = Model.Images
+        .OrderBy(image => image.Id)
+        .Select(image => new
+        {
+            Source = image.GetImageSource(),
+            Angle = string.IsNullOrWhiteSpace(image.ViewAngle) ? "Angle" : image.ViewAngle,
+            Alt = string.IsNullOrWhiteSpace(image.Description) ? $"{Model.Name} {image.ViewAngle}" : image.Description
+        })
+        .Where(image => !string.IsNullOrWhiteSpace(image.Source))
+        .ToList();
+    var primaryImage = imageChoices.FirstOrDefault();
+}
+
 <section class="fv-section pt-5">
     <div class="container">
         <div class="fv-page-header">
@@ -35,14 +49,9 @@
 
         <div class="fv-detail-hero">
             <div class="fv-detail-hero__media">
-                @if (Model.Images.Count > 0)
+                @if (primaryImage is not null)
                 {
-                    var heroImage = Model.Images.OrderBy(image => image.Id).FirstOrDefault();
-                    var heroSource = heroImage?.GetImageSource();
-                    if (!string.IsNullOrWhiteSpace(heroSource))
-                    {
-                        <img src="@heroSource" alt="@Model.Name main preview" />
-                    }
+                    <img src="@primaryImage.Source" alt="@primaryImage.Alt" data-detail-carousel-main />
                 }
 
                 <div class="fv-detail-hero__overlay">
@@ -50,10 +59,29 @@
                     <div class="fv-detail-hero__title">@Model.Name</div>
                     @if (!string.IsNullOrWhiteSpace(Model.Tagline))
                     {
-                        <p class="fv-detail-hero__copy mb-0">@Model.Tagline</p>
+                        <p class="fv-detail-hero__copy mb-0" data-detail-carousel-caption>@Model.Tagline</p>
                     }
                 </div>
             </div>
+
+            @if (imageChoices.Count > 1)
+            {
+                <div class="fv-detail-hero__thumbs" data-detail-carousel>
+                    @foreach (var image in imageChoices)
+                    {
+                        <button type="button"
+                                class="fv-detail-hero__thumb"
+                                data-detail-carousel-thumb
+                                data-image-src="@image.Source"
+                                data-image-alt="@image.Alt"
+                                data-image-caption="@image.Angle"
+                                aria-pressed="@(image == primaryImage ? "true" : "false")">
+                            <img src="@image.Source" alt="@image.Angle" />
+                            <span>@image.Angle</span>
+                        </button>
+                    }
+                </div>
+            }
 
             <aside class="fv-detail-hero__rail fv-pane fv-pane--dark">
                 <div class="fv-detail-shell__assistant">
